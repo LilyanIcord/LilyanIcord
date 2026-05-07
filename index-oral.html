@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio - Version orale (sans texte)</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #020617;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="portfolioFrame" src="index.html" title="Portfolio version orale"></iframe>
+
+  <script>
+    const frame = document.getElementById("portfolioFrame");
+
+    frame.addEventListener("load", () => {
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const style = doc.createElement("style");
+        style.textContent = `
+          /* Version orale: garder uniquement les titres / noms des parties */
+          p, li, span, label, button, small, em, strong {
+            color: transparent !important;
+            text-shadow: none !important;
+            user-select: none !important;
+          }
+
+          /* Cache le texte des liens, mais pas les titres qu'ils contiennent */
+          a {
+            color: transparent !important;
+            text-shadow: none !important;
+          }
+          a h1, a h2, a h3, a h4, a h5, a h6 {
+            color: inherit !important;
+            text-shadow: none !important;
+          }
+
+          /* Garde visibles les titres de section / cartes */
+          h1, h2, h3, h4, h5, h6 {
+            color: inherit !important;
+            text-shadow: none !important;
+          }
+
+          input::placeholder,
+          textarea::placeholder {
+            color: transparent !important;
+          }
+        `;
+        doc.head.appendChild(style);
+      } catch (error) {
+        console.error("Impossible d'appliquer le mode oral :", error);
+      }
+    });
+  </script>
+</body>
+</html>

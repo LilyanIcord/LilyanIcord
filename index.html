@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lilyan Icord – Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <input type="checkbox" id="menu-toggle" class="sr-only" aria-hidden="true">
+  <label for="menu-toggle" class="menu-toggle" aria-label="Ouvrir le menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+
+  <aside class="sidebar" id="sidebar">
+    <header class="sidebar-header">
+      <img src="900D91E6-76F3-4186-9BE7-17BFF9470B79_L0_001-15_11_2024 09_09_36.jpg" alt="Lilyan Icord" class="sidebar-photo" onerror="this.style.display='none'">
+      <h1 class="sidebar-name">Lilyan Icord</h1>
+      <p class="sidebar-subtitle">Étudiant en 2<sup>e</sup> année BTS SIO - Option SLAM au Lycée Édouard Gand à Amiens</p>
+      <input type="checkbox" id="theme-toggle" class="sr-only" aria-hidden="true">
+      <label for="theme-toggle" class="theme-toggle" aria-label="Basculer le thème">
+        <span class="icon-sun">☀</span>
+        <span class="icon-moon">🌙</span>
+      </label>
+    </header>
+
+    <nav class="sidebar-nav">
+      <a href="#accueil" class="nav-link">Accueil</a>
+      <a href="#profil" class="nav-link">Profil</a>
+      <a href="#parcours" class="nav-link">Parcours</a>
+      <a href="#bts-sio" class="nav-link">BTS SIO</a>
+      <a href="#competences" class="nav-link">Compétences</a>
+      <a href="#veille" class="nav-link">Veille technologique</a>
+      <a href="#certifications" class="nav-link">Certifications</a>
+      <a href="#projets" class="nav-link">&lt;/&gt; Projets</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <div class="sidebar-social">
+      <a href="mailto:lilyan.icord@yahoo.com" class="social-link" aria-label="Email">✉</a>
+      <a href="https://github.com" class="social-link" target="_blank" rel="noopener" aria-label="GitHub">⌘</a>
+      <a href="https://linkedin.com" class="social-link" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+    </div>
+
+    <footer class="sidebar-footer">
+      <p>© Copyright 2026 – Conçu par Lilyan Icord – Tous droits réservés</p>
+      <a href="#mentions" class="footer-legal">Mentions légales</a>
+    </footer>
+  </aside>
+
+  <label for="menu-toggle" class="sidebar-overlay" aria-hidden="true"></label>
+
+  <main class="main-content">
+    <div class="bg-shapes" aria-hidden="true">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+      <div class="shape shape-6"></div>
+      <div class="shape shape-7"></div>
+      <div class="shape shape-8"></div>
+      <div class="shape shape-9"></div>
+      <div class="shape shape-10"></div>
+      <div class="shape shape-11"></div>
+      <div class="shape shape-12"></div>
+      <div class="shape shape-13"></div>
+    </div>
+
+    <section id="accueil" class="section section-hero">
+      <div class="hero-content">
+        <div class="hero-left">
+          <p class="hero-welcome">Bienvenue sur mon portfolio</p>
+          <h2 class="hero-title">Lilyan Icord</h2>
+          <p class="hero-role">Je suis <span class="accent">étudiant en BTS SIO - Option SLAM</span></p>
+          <p class="hero-desc">Étudiant en BTS SIO SLAM à Amiens, avec un Bac Pro RISC. Je me forme au développement d'applications web et métier.</p>
+          <div class="hero-social">
+            <a href="mailto:lilyan.icord@yahoo.com" class="hero-social-link" aria-label="Email">✉</a>
+            <a href="https://github.com" class="hero-social-link" target="_blank" rel="noopener" aria-label="GitHub">⌘</a>
+            <a href="https://linkedin.com" class="hero-social-link" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+          </div>
+          <div class="hero-buttons">
+            <a href="CV%20Professionnel%20Simple%20Beige%20et%20Noir%20%282%29.pdf" target="_blank" rel="noopener" class="hero-btn hero-btn-primary">Télécharger mon CV</a>
+            <a href="#projets" class="hero-btn hero-btn-outline">Voir mes projets</a>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-hex-wrap">
+            <div class="hero-hex-inner">
+              <img src="900D91E6-76F3-4186-9BE7-17BFF9470B79_L0_001-15_11_2024 09_09_36.jpg" alt="Lilyan Icord" class="hero-photo">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="profil" class="section">
+      <h2 class="section-title reveal">Profil</h2>
+
+      <div class="profil-block reveal">
+        <h3 class="profil-subtitle">À propos de moi</h3>
+        <p class="section-text">
+          Je suis Lilyan Icord, 20 ans, en 2<sup>e</sup> année de BTS SIO SLAM au Lycée Édouard Gand à Amiens.
+        </p>
+      </div>
+
+      <div class="profil-block reveal">
+        <h3 class="profil-subtitle">Mes projets professionnels</h3>
+        <p class="section-text">
+          Objectif à court terme : valider mon BTS SIO SLAM.
+        </p>
+        <p class="section-text">
+          Objectif à long terme : poursuivre mes études et lancer une activité dans l'informatique.
+        </p>
+      </div>
+    </section>
+
+    <section id="parcours" class="section">
+      <h2 class="section-title reveal">Parcours</h2>
+
+      <div class="parcours-timeline">
+        <div class="parcours-line"></div>
+
+        <div class="parcours-step reveal">
+          <div class="parcours-step-marker"></div>
+          <div class="parcours-step-content">
+            <div class="parcours-step-header">
+              <span class="parcours-step-year">2022</span>
+              <h3 class="parcours-step-title">Bac Professionnel RISC</h3>
+            </div>
+            <p class="parcours-step-subtitle">
+              Réseaux Informatiques et Systèmes Communicants – <strong>Mention Bien</strong>
+            </p>
+            <p class="parcours-step-text">
+              Bac Pro RISC obtenu avec de bonnes bases en réseaux, systèmes et infrastructure.
+            </p>
+          </div>
+        </div>
+
+        <div class="parcours-step reveal">
+          <div class="parcours-step-marker"></div>
+          <div class="parcours-step-content">
+            <div class="parcours-step-header">
+              <span class="parcours-step-year">2024 – En cours </span>
+              <h3 class="parcours-step-title">BTS SIO – Option SLAM</h3>
+            </div>
+            <p class="parcours-step-subtitle">
+              Services Informatiques aux Organisations – Solutions Logicielles et Applications Métier
+            </p>
+            <p class="parcours-step-text">
+              Formation orientée développement d'applications, programmation, BDD et gestion de projet.
+            </p>
+            <p class="parcours-step-text">
+              <a href="../rapport%20de%20stage%20premi%C3%A8re%20ann%C3%A9e%20sio.pdf" target="_blank" rel="noopener">Rapport de stage première année</a>
+            </p>
+            <p class="parcours-step-text">
+              <a href="../rapport%20de%20stage%20deuxi%C3%A8me%20ann%C3%A9e%20bts%20sio.pdf" target="_blank" rel="noopener">Rapport de stage deuxième année</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="bts-sio" class="section">
+      <h2 class="section-title reveal">Le BTS SIO</h2>
+
+      <div class="profil-block reveal">
+        <h3 class="profil-subtitle">Qu'est-ce que le BTS SIO ?</h3>
+        <p class="section-text">
+          Le BTS SIO est une formation de 2 ans aux métiers de l'informatique : analyser, concevoir, développer et maintenir.
+        </p>
+      </div>
+
+      <div class="profil-block reveal">
+        <h3 class="profil-subtitle">Les deux options de la formation</h3>
+        <div class="bts-options-grid">
+          <article class="bts-option-card">
+            <h4 class="bts-option-title">Option SISR</h4>
+            <p class="section-text bts-option-text">
+              <strong>Solutions d'Infrastructure, Systèmes et Réseaux</strong> : administration serveurs, réseaux, sécurité et support.
+            </p>
+            <p class="section-text bts-option-text">
+              Débouchés : technicien systèmes/réseaux, support, administrateur junior.
+            </p>
+          </article>
+
+          <article class="bts-option-card">
+            <h4 class="bts-option-title">Option SLAM</h4>
+            <p class="section-text bts-option-text">
+              <strong>Solutions Logicielles et Applications Métier</strong> : développement d'applications web et métier.
+            </p>
+            <p class="section-text bts-option-text">
+              Compétences : analyse du besoin, BDD, tests, maintenance.
+            </p>
+            <p class="section-text bts-option-text">
+              Technos : HTML/CSS, JavaScript, PHP, SQL, MVC. Métiers : développeur web/applicatif.
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <div class="profil-block reveal">
+        <h3 class="profil-subtitle">Ce que j'apprends en SLAM</h3>
+        <p class="section-text">
+          En SLAM, je travaille la programmation, les bases de données, la gestion de projet et la documentation technique.
+        </p>
+      </div>
+
+      <div class="profil-block reveal">
+        <h3 class="profil-subtitle">Débouchés après le BTS SIO</h3>
+        <p class="section-text">
+          Après le BTS : insertion professionnelle (développeur, support, intégrateur) ou poursuite d'études (licence, bachelor, école).
+        </p>
+      </div>
+    </section>
+
+    <section id="competences" class="section">
+      <h2 class="section-title">Compétences</h2>
+      <div class="skills-grid">
+        <div class="skill-item">
+          <div class="skill-icon" aria-hidden="true">HTML</div>
+          <div class="skill-content">
+            <span class="skill-name">HTML 5</span>
+            <div class="skill-bar"><span class="skill-fill" style="width: 90%;"></span></div>
+            <span class="skill-pct">90%</span>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon" aria-hidden="true">CSS</div>
+          <div class="skill-content">
+            <span class="skill-name">CSS 3</span>
+            <div class="skill-bar"><span class="skill-fill" style="width: 80%;"></span></div>
+            <span class="skill-pct">80%</span>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon" aria-hidden="true">JS</div>
+          <div class="skill-content">
+            <span class="skill-name">JavaScript</span>
+            <div class="skill-bar"><span class="skill-fill" style="width: 60%;"></span></div>
+            <span class="skill-pct">60%</span>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon" aria-hidden="true">SQL</div>
+          <div class="skill-content">
+            <span class="skill-name">Bases de données (SQL)</span>
+            <div class="skill-bar"><span class="skill-fill" style="width: 70%;"></span></div>
+            <span class="skill-pct">70%</span>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon" aria-hidden="true">PHP</div>
+          <div class="skill-content">
+            <span class="skill-name">PHP</span>
+            <div class="skill-bar"><span class="skill-fill" style="width: 65%;"></span></div>
+            <span class="skill-pct">65%</span>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon" aria-hidden="true">R & S</div>
+          <div class="skill-content">
+            <span class="skill-name">Réseaux et systèmes</span>
+            <div class="skill-bar"><span class="skill-fill" style="width: 75%;"></span></div>
+            <span class="skill-pct">75%</span>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon" aria-hidden="true">C#</div>
+          <div class="skill-content">
+            <span class="skill-name">C#</span>
+            <div class="skill-bar"><span class="skill-fill" style="width: 70%;"></span></div>
+            <span class="skill-pct">70%</span>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon" aria-hidden="true">Symfony</div>
+          <div class="skill-content">
+            <span class="skill-name">Symfony</span>
+            <div class="skill-bar"><span class="skill-fill" style="width: 55%;"></span></div>
+            <span class="skill-pct">55%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="veille" class="section">
+      <div class="veille-wrapper">
+        <h2 class="section-title">Veille technologique</h2>
+
+        <header class="veille-intro reveal">
+          <h3 class="veille-title">La cybersécurité militaire et la cyberguerre</h3>
+          <p class="veille-subtitle">
+            Veille sur la cybersécurité militaire : menaces, défense et enjeux stratégiques pour les États.
+          </p>
+          <p class="veille-subtitle">
+            <strong>Question de veille :</strong> Pourquoi la cybersécurité est‑elle devenue un enjeu stratégique
+            majeur pour les forces armées&nbsp;?
+          </p>
+        </header>
+
+        <article class="veille-block reveal">
+          <header class="veille-block-header">
+            <div class="veille-block-icon">⚔️</div>
+            <div>
+              <h4 class="veille-block-title">I. Qu’est‑ce que la cyberguerre&nbsp;?</h4>
+              <p class="veille-block-period">Définition et types d’attaques</p>
+            </div>
+          </header>
+          <div class="veille-grid veille-grid--future">
+            <div class="veille-card">
+              <h5>Définition</h5>
+              <p>
+                Opérations offensives et défensives dans le cyberespace entre États.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Espionnage</h5>
+              <p>
+.0                Infiltration de réseaux pour voler des informations sensibles.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Sabotage</h5>
+              <p>
+                Attaques visant à perturber ou détruire des systèmes critiques.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Désinformation</h5>
+              <p>
+                Diffusion de fausses informations pour déstabiliser un pays.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="veille-block reveal">
+          <header class="veille-block-header">
+            <div class="veille-block-icon veille-block-icon--today">🛡️</div>
+            <div>
+              <h4 class="veille-block-title">II. Menaces cyber dans le domaine militaire</h4>
+              <p class="veille-block-period">Cibles et impacts possibles</p>
+            </div>
+          </header>
+          <div class="veille-grid">
+            <div class="veille-card">
+              <h5>Attaques sur les systèmes de défense</h5>
+              <p>
+                Tentatives de neutralisation de systèmes militaires (drones, satellites, défense aérienne).
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Vol de données sensibles</h5>
+              <p>
+                Piratage de bases de données militaires sensibles.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Paralysie des infrastructures</h5>
+              <p>
+                Attaques sur infrastructures clés pouvant bloquer la défense d'un pays.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="veille-block reveal">
+          <header class="veille-block-header">
+            <div class="veille-block-icon veille-block-icon--future">🚀</div>
+            <div>
+              <h4 class="veille-block-title">III &amp; IV. Défense, coopération et avenir</h4>
+              <p class="veille-block-period">Protection, alliances et perspectives</p>
+            </div>
+          </header>
+          <div class="veille-grid veille-grid--future">
+            <div class="veille-card">
+              <h5>Sécurisation et surveillance</h5>
+              <p>
+                Renforcement des réseaux et SOC pour détecter/répondre rapidement.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Coopération internationale</h5>
+              <p>
+                Partage d'informations entre alliés (OTAN, UE) et cyberdéfense commune.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Course technologique et IA</h5>
+              <p>
+                IA pour détecter les attaques et automatiser la réponse.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Difficulté d’attribution</h5>
+              <p>
+                Attribution difficile : attaques anonymes, réponse politique plus complexe.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Deuxième veille : Objets connectés et performance sportive -->
+        <header class="veille-intro reveal veille-intro--second">
+          <h3 class="veille-title">Objets connectés et performance sportive</h3>
+          <p class="veille-subtitle">
+            Cette veille montre comment les objets connectés aident les sportifs à mieux s'entraîner et éviter les blessures.
+          </p>
+          <p class="veille-subtitle">
+            <strong>Question de veille :</strong> Comment les objets connectés (montres GPS, capteurs cardiaques,
+            textiles intelligents) améliorent‑ils la performance et la prévention des blessures dans le sport&nbsp;?
+          </p>
+        </header>
+
+        <article class="veille-block reveal">
+          <header class="veille-block-header">
+            <div class="veille-block-icon">🏃</div>
+            <div>
+              <h4 class="veille-block-title">I. Outils connectés utilisés</h4>
+              <p class="veille-block-period">Montres GPS, capteurs cardiaques, textiles intelligents</p>
+            </div>
+          </header>
+          <div class="veille-grid veille-grid--future">
+            <div class="veille-card">
+              <h5>Montres GPS sportives</h5>
+              <p>
+                Donnent la distance, l'allure et l'intensité pour ajuster l'entraînement.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Capteurs cardiaques</h5>
+              <p>
+                Suivent la fréquence cardiaque en direct pour mieux gérer l'effort.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Textiles et capteurs intelligents</h5>
+              <p>
+                Analysent la posture et les mouvements pour améliorer la technique.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="veille-block reveal">
+          <header class="veille-block-header">
+            <div class="veille-block-icon veille-block-icon--today">📺</div>
+            <div>
+              <h4 class="veille-block-title">II. Usages concrets à l'entraînement</h4>
+              <p class="veille-block-period">Préparation, séance, récupération</p>
+            </div>
+          </header>
+          <div class="veille-grid">
+            <div class="veille-card">
+              <h5>Avant séance : planification personnalisée</h5>
+              <p>
+                Ajustement de la charge selon fatigue et objectifs.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Pendant l'effort : suivi en direct</h5>
+              <p>
+                Suivi en direct des indicateurs pour contrôler l'intensité.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Après séance : récupération pilotée</h5>
+              <p>
+                Suivi sommeil/fatigue pour adapter repos et reprise.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="veille-block reveal">
+          <header class="veille-block-header">
+            <div class="veille-block-icon veille-block-icon--future">⚖️</div>
+            <div>
+              <h4 class="veille-block-title">III. Avantages et limites</h4>
+              <p class="veille-block-period">Bénéfices mesurables et limites opérationnelles</p>
+            </div>
+          </header>
+          <div class="veille-grid">
+            <div class="veille-card">
+              <h5>Avantages</h5>
+              <p>
+                Entraînement plus objectif et progression mieux mesurée.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Limites techniques et économiques</h5>
+              <p>
+                Limites : coût, fiabilité variable, interprétation parfois difficile.
+              </p>
+            </div>
+            <div class="veille-card">
+              <h5>Questions éthiques</h5>
+              <p>
+                Enjeux éthiques : données de santé, consentement, usage responsable.
+              </p>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="certifications" class="section">
+      <h2 class="section-title">Certifications</h2>
+      <div class="cert-boxes">
+        <a href="certification-pix-20260216.pdf" target="_blank" rel="noopener" class="cert-box" title="Ouvrir le certificat PIX (PDF)">
+          <img src="images/certification-pix.png" alt="Certification PIX – Lilyan Icord – Niveau Indépendant 2" class="cert-box-img">
+          <span class="cert-box-label">Certification PIX – Cliquer pour ouvrir le PDF</span>
+        </a>
+        <a href="BTS_SIO_Annexe_VI.5_Epreuve%20E5%20-%20Tableau%20de%20synthese_2026.pdf" target="_blank" rel="noopener" class="cert-box" title="Ouvrir le tableau de synthèse (PDF)">
+          <img src="images/tableau-synthese.png" alt="BTS SIO – Tableau de synthèse des réalisations professionnelles" class="cert-box-img">
+          <span class="cert-box-label">Tableau de synthèse BTS SIO – Cliquer pour ouvrir le PDF</span>
+        </a>
+        <div class="cert-box cert-box--empty">
+          <div class="cert-box-placeholder"></div>
+          <span class="cert-box-label">À venir</span>
+        </div>
+        <div class="cert-box cert-box--empty">
+          <div class="cert-box-placeholder"></div>
+          <span class="cert-box-label">À venir</span>
+        </div>
+      </div>
+      <ul class="cert-list">
+      </ul>
+    </section>
+
+    <section id="projets" class="section">
+      <h2 class="section-title">Projets</h2>
+      <p class="section-text projets-intro">
+        Une sélection de réalisations scolaires et personnelles, avec des projets web et des documents techniques.
+      </p>
+      <div class="projets-grid">
+       
+        
+        <a href="../stages/index.html" class="projet-card" title="Voir le projet Stage" target="_blank" rel="noopener">
+          <div class="projet-image projet-image--stage"></div>
+          <div class="projet-card-label">
+            <h3>Projet Stage</h3>
+            <p>Projet en contexte professionnel avec structure multi-sections.</p>
+            <p class="projet-tech">HTML • CSS • Intégration</p>
+            <span class="projet-link">Voir le projet</span>
+          </div>
+        </a>
+        <a href="projet-iss-master.html" class="projet-card" title="Voir le projet ISS Master">
+          <div class="projet-image projet-image--iss"></div>
+          <div class="projet-card-label">
+            <h3>ISS Master</h3>
+            <p>Fiche projet : objectifs, conception, fonctionnalités.</p>
+            <p class="projet-tech">Documentation PDF</p>
+            <span class="projet-link">Ouvrir la fiche</span>
+          </div>
+        </a>
+        <a href="projet-wheaterapp-master.html" class="projet-card" title="Voir le projet WeatherApp Master">
+          <div class="projet-image projet-image--weather"></div>
+          <div class="projet-card-label">
+            <h3>WeatherApp Master</h3>
+            <p>Application météo avec API et interface utilisateur.</p>
+            <p class="projet-tech">JavaScript • API • UI</p>
+            <span class="projet-link">Ouvrir la fiche</span>
+          </div>
+        </a>
+        <a href="projet-php-mvc.html" class="projet-card" title="Voir le projet PHP MVC">
+          <div class="projet-image projet-image--phpmvc"></div>
+          <div class="projet-card-label">
+            <h3>PHP MVC</h3>
+            <p>Projet structuré en MVC avec séparation des responsabilités.</p>
+            <p class="projet-tech">PHP • MVC • SQL</p>
+            <span class="projet-link">Ouvrir la fiche</span>
+          </div>
+        </a>
+        <a href="projet-sitefrancemobilier.html" class="projet-card" title="Voir le projet SiteFranceMobilier">
+          <div class="projet-image projet-image--sfm"></div>
+          <div class="projet-card-label">
+            <h3>SiteFranceMobilier</h3>
+            <p>Application web de gestion/consultation de produits en PHP.</p>
+            <p class="projet-tech">PHP • MVC • SQL • CSS</p>
+            <span class="projet-link">Ouvrir la fiche</span>
+          </div>
+        </a>
+        <div class="projet-card" aria-label="Projet à venir">
+          <div class="projet-image projet-image--coming"></div>
+          <div class="projet-card-label">
+            <h3>Projet à venir</h3>
+            <p>Un nouveau projet sera ajouté prochainement dans cette section.</p>
+            <p class="projet-tech">En préparation</p>
+            <span class="projet-link">Bientôt disponible</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <h2 class="section-title">Contact</h2>
+      <p class="section-text">Pour me contacter : <a href="mailto:lilyan.icord@yahoo.com" class="contact-email">lilyan.icord@yahoo.com</a></p>
+      <form class="contact-form" action="#" method="post">
+        <label for="name">Nom</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+        <button type="submit" class="btn-submit">Envoyer</button>
+      </form>
+    </section>
+
+    <a href="#accueil" class="scroll-top" aria-label="Retour en haut">↑</a>
+  </main>
+
+  <footer id="mentions" class="legal-bar">
+    <div class="legal-bar-inner">
+      <h2 class="legal-bar-title">Mentions légales</h2>
+      <p class="legal-bar-text">© Copyright 2026 – Conçu par Lilyan Icord – Tous droits réservés. Page mentions légales – à compléter avec les informations de l'hébergeur et du responsable de publication.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

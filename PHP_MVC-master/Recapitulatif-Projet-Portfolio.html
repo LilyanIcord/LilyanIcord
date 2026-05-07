@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion du Personnel - Projet PHP MVC</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --card: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22d3ee;
+      --border: #374151;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 20px 40px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #111827 60%, #0b1020 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      color: #fff;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+    }
+    .section {
+      background: rgba(17, 24, 39, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .section h2 {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 1.25rem;
+    }
+    .section h3 {
+      margin: 16px 0 8px;
+      font-size: 1rem;
+      color: #c4f4ff;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .shot {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 0;
+    }
+    .shot img {
+      display: block;
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+    }
+    .shot figcaption {
+      padding: 8px 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    pre {
+      margin: 8px 0 0;
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 12px;
+      overflow-x: auto;
+      color: #e2e8f0;
+      font-size: 0.86rem;
+    }
+    code { font-family: Consolas, monospace; }
+    ul { margin: 0; padding-left: 20px; }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .tag {
+      background: #0b3a46;
+      border: 1px solid #145369;
+      color: #9eefff;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .shot img { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <h1>Site de Gestion du Personnel</h1>
+      <p class="subtitle">
+        Projet BTS SIO SLAM - Application web PHP avec architecture MVC, authentification et gestion complète des employés.
+      </p>
+    </header>
+
+    <section class="section">
+      <h2>1) Présentation du projet</h2>
+      <p>
+        Ce projet a pour objectif de gérer les employés d'une entreprise via une application web.
+        L'utilisateur peut se connecter, consulter les employés, filtrer par service, ajouter, modifier et supprimer des fiches.
+      </p>
+      <p>
+        L'application est structurée en <strong>MVC</strong> pour séparer la logique métier, l'affichage et la gestion des requêtes.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>2) Captures du projet (dossier image site)</h2>
+      <div class="grid">
+        <figure class="shot">
+          <img src="image%20site/page%20d'accueil.PNG" alt="Page d'accueil">
+          <figcaption>Page d'accueil</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="image%20site/vue%20login.PNG" alt="Connexion">
+          <figcaption>Vue de connexion</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="image%20site/menu%20employes.PNG" alt="Menu employés">
+          <figcaption>Menu principal employés</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="image%20site/ListeEmployes.PNG" alt="Liste employés">
+          <figcaption>Tableau de la liste des employés</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="image%20site/page%20ajoutEmploye.PNG" alt="Ajout employé">
+          <figcaption>Formulaire d'ajout d'un employé</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="image%20site/concepteur.PNG" alt="Concepteur base de données">
+          <figcaption>Schéma de base de données</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>3) Architecture MVC et routage</h2>
+      <p>
+        Le fichier <code>index.php</code> agit comme routeur principal. Selon le paramètre <code>page</code>,
+        il charge le contrôleur correspondant et vérifie la session utilisateur sur les pages protégées.
+      </p>
+      <pre><code>$page = $_GET['page'] ?? 'login';
+
+switch ($page) {
+  case "listeEmployes":
+    if (!$auth->isLoggedOn()) {
+      header("Location: index.php?page=connexion");
+      exit();
+    }
+    require_once "controleurs/C_consulterEmployes.php";
+    $controleur = new C_consulterEmployes();
+    $controleur->action_listeEmployes($_GET['service'] ?? null);
+    break;
+}</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>4) Gestion des employés (CRUD)</h2>
+      <h3>Contrôleur - ajout d'un employé</h3>
+      <pre><code>public function action_ajout($matricule, $nom, $prenom, $service)
+{
+  if (is_null($this->modeleEmploye->GetEmploye($matricule))) {
+    $employe = $this->modeleEmploye->Ajouter($matricule, $nom, $prenom, $service);
+    $this->data['leMessage'] = is_null($employe)
+      ? "L'ajout a échoué."
+      : $employe->GetNom()." ".$employe->GetPrenom()." a été ajouté.";
+  } else {
+    $this->data['leMessage'] = "Matricule déjà existant, ajout annulé.";
+  }
+  require_once "vues/v_message.php";
+}</code></pre>
+
+      <h3>Modèle - mise à jour SQL</h3>
+      <pre><code>$req = "UPDATE employe SET
+          emp_nom = '$nom',
+          emp_prenom = '$prenom',
+          emp_service = '$service'
+        WHERE emp_matricule = '$matricule'";
+$ok = mysqli_query($this->GetCnx(), $req);</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>5) Affichage et expérience utilisateur</h2>
+      <p>
+        La vue liste affiche les employés dans un tableau Bootstrap avec des actions Modifier / Supprimer.
+        Une recherche dynamique côté client permet de filtrer instantanément le tableau.
+      </p>
+      <pre><code>document.getElementById('searchInput').addEventListener('keyup', function() {
+  let filter = this.value.toLowerCase();
+  let rows = document.querySelectorAll('#employeeTable tbody tr');
+  rows.forEach(row => {
+    let text = row.textContent.toLowerCase();
+    row.style.display = text.includes(filter) ? '' : 'none';
+  });
+});</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>6) Sécurité et bonnes pratiques</h2>
+      <ul>
+        <li>Contrôle de session avant les pages sensibles.</li>
+        <li>Échappement SQL avec <code>mysqli_real_escape_string</code>.</li>
+        <li>Échappement HTML avec <code>htmlspecialchars</code> dans les vues.</li>
+        <li>Gestion des redirections après actions critiques (modifier/supprimer).</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>7) Technologies utilisées</h2>
+      <div class="tags">
+        <span class="tag">PHP</span>
+        <span class="tag">MVC</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">Bootstrap</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">HTML/CSS</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>8) Conclusion</h2>
+      <p>
+        Ce projet m'a permis de consolider mes compétences en développement web back-end et front-end,
+        en structurant une application réelle autour d'une architecture MVC, d'une base de données MySQL
+        et d'une interface orientée utilisateur.
+      </p>
+    </section>
+  </main>
+</body>
+</html>

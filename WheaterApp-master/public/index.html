@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js - using Geolocation Api</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+ 
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Weatherapp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">Nouvelle localisation</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="all.html">Liste de toutes les localisations</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <h1 class="mb-4">Géolocalisation</h1>
+
+        <div class="mb-3">
+            <p><strong>Votre position :</strong></p>
+            <p>Latitude : <span id="latitude">-</span>°</p>
+            <p>Longitude : <span id="longitude">-</span>°</p>
+            <p>Ville : <span id="city">-</span></p>
+            <p>Pays : <span id="country">-</span></p>
+
+            <p>Condition : <span id="summary">-</span></p>
+            <p>Température : <span id="temperature">-</span> °C</p>
+            <p>Niveau de pollution de l'air (index UK DEFRA) : <span id="airQualityIndex">-</span></p>
+            <p>Concentration de particules fines (PM2.5) : <span id="pm25">-</span> μg/m³</p>
+        </div>
+
+        <div class="mb-3">
+            <label for="mood" class="form-label"><strong>Mood :</strong></label>
+            <input type="text" class="form-control" id="mood" value="" minlength="4" maxlength="10" size="10" />
+        </div>
+        <button id="submit" type="button" class="btn btn-primary">Envoyer</button>
+    </div>
+
+
+</body>
+    <script>
+        let lat;
+        let long;
+        let city;
+        let country;
+        let condition;
+        let temperature;
+        let defra;
+        let pm25;
+
+        function getDefraLevel(defraIndex) {
+            if (defraIndex >= 1 && defraIndex <= 3) {
+                return 'Faible';
+            } else if (defraIndex >= 4 && defraIndex <= 6) {
+                return 'Modéré';
+            } else if (defraIndex >= 7 && defraIndex <= 9) {
+                return 'Élevé';
+            } else if (defraIndex >= 10) {
+                return 'Très élevé';
+            } else {
+                return 'Non disponible';
+            }
+        }
+
+        const API_BASE_URL = 'http://localhost:3000';
+        const isHttpPage = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+        const preferredApiBase = isHttpPage ? window.location.origin : null;
+        const candidateApiBases = Array.from(new Set([preferredApiBase, API_BASE_URL].filter(Boolean)));
+
+        async function fetchWithFallback(urlPath, options) {
+            let lastHttpError = null;
+            let sawNetworkError = false;
+
+            for (const baseUrl of candidateApiBases) {
+                const fullUrl = `${baseUrl}${urlPath}`;
+                try {
+                    const response = await fetch(fullUrl, options);
+                    if (response.ok) {
+                        return response;
+                    }
+                    lastHttpError = new Error(`Réponse HTTP ${response.status} sur ${fullUrl}`);
+                } catch (error) {
+                    sawNetworkError = true;
+                    lastHttpError = error;
+                }
+            }
+
+            if (sawNetworkError) {
+                throw new Error("Impossible de contacter l'API météo. Vérifie que le serveur Node est lancé sur http://localhost:3000.");
+            }
+
+            throw lastHttpError || new Error('Impossible de contacter le serveur API.');
+        }
+
+        const button = document.getElementById('submit');
+        button.addEventListener('click', async event => {
+            const mood = document.getElementById('mood').value;
+            const data = {
+                latitude: lat,
+                longitude: long,
+                mood: mood,
+                city: city,
+                country: country,
+                condition: condition,
+                temperature: temperature,
+                defra: defra,
+                pm25: pm25
+            };
+
+            const options = {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            };
+
+            try {
+                const response = await fetchWithFallback('/api', options);
+                const contentType = response.headers.get('content-type') || '';
+                if (!contentType.includes('application/json')) {
+                    const rawText = await response.text();
+                    throw new Error(`Réponse non JSON reçue (début): ${rawText.slice(0, 60)}`);
+                }
+                const dataResponse = await response.json();
+                console.log(dataResponse);
+                alert('Données enregistrées avec succès !');
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur lors de l\'enregistrement');
+            }
+        });
+
+        if ("geolocation" in navigator) {
+            console.log('geolocation available');
+            navigator.geolocation.getCurrentPosition(async position => {
+                try {
+                    console.log(position.coords.latitude);
+                    lat = position.coords.latitude;
+                    document.getElementById('latitude').textContent = lat.toFixed(5);
+                    console.log(position.coords.longitude);
+                    long = position.coords.longitude;
+                    document.getElementById('longitude').textContent = long.toFixed(5);
+
+                 
+                    const response = await fetchWithFallback(`/weather/${lat}/${long}`);
+                    const contentType = response.headers.get('content-type') || '';
+                    if (!contentType.includes('application/json')) {
+                        const rawText = await response.text();
+                        throw new Error(`Réponse non JSON reçue (début): ${rawText.slice(0, 60)}`);
+                    }
+                    const json = await response.json();
+
+                    if (!response.ok || json.status === 'GET Error' || !json.current || !json.location) {
+                        throw new Error(json.message || 'Réponse météo invalide');
+                    }
+
+                    city = json.location?.name || 'Non disponible';
+                    country = json.location?.country || 'Non disponible';
+                    condition = json.current?.condition?.text || 'Non disponible';
+                    temperature = json.current?.temp_c ?? 'Non disponible';
+                    defra = json.current?.air_quality?.['gb-defra-index'] ?? null;
+                    pm25 = json.current?.air_quality?.pm2_5 ?? null;
+
+              
+                    document.getElementById('city').textContent = city;
+                    document.getElementById('country').textContent = country;
+                    document.getElementById('summary').textContent = condition;
+                    document.getElementById('temperature').textContent = temperature;
+                    document.getElementById('airQualityIndex').textContent = defra !== null
+                        ? `${getDefraLevel(defra)} (${defra})`
+                        : 'Non disponible';
+                    document.getElementById('pm25').textContent = pm25 !== null ? pm25 : 'Non disponible';
+                    console.log(json);
+                } catch(error) {
+                    console.error(error);
+                    alert(`Erreur lors de la récupération des données météo : ${error.message}`);
+                }
+            });
+        } else {
+            console.log('geolocation not available');
+        }
+    </script>
+</html>

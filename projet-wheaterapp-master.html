@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet WeatherApp Master - Détail</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .main-content .section { max-width: none; width: 100%; margin: 0; padding: 2rem 2.2rem 3rem; }
+    :root { --pro-surface: rgba(20,25,36,.58); --pro-line: rgba(255,255,255,.08); --pro-shadow: 0 14px 30px rgba(0,0,0,.18); }
+    .project-wrap { width: 100%; position: relative; }
+    .project-layout { display: grid; grid-template-columns: 320px minmax(0,1fr) 320px; gap: 1.4rem; align-items: start; }
+    .project-aside, .right-card { background: var(--pro-surface); border: 1px solid var(--pro-line); border-radius: 14px; box-shadow: var(--pro-shadow); }
+    .project-aside { position: sticky; top: 1rem; padding: 1.15rem; }
+    .project-aside h3 { margin: 0 0 .7rem; font-size: .95rem; color: var(--accent); }
+    .project-toc { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+    .project-toc a { display: block; padding: .42rem .5rem; border-radius: 8px; color: var(--text-secondary); border: 1px solid transparent; font-size: .85rem; }
+    .project-toc a:hover { color: var(--text-primary); background: rgba(255,255,255,.03); }
+    .project-toc a.is-active { color: var(--text-primary); background: rgba(79,209,197,.16); border-color: rgba(79,209,197,.28); }
+    .project-right { position: sticky; top: 1rem; display: grid; gap: 1rem; }
+    .right-card { padding: 1rem; min-height: 170px; display: flex; flex-direction: column; justify-content: center; }
+    .right-card-tree { justify-content: flex-start; min-height: auto; }
+    .right-card-tree .file-tree { font-size: .8rem; }
+    .code-panel-note { margin: 0 0 .8rem; color: var(--text-secondary); font-size: .9rem; }
+    .code-panel #file-viewer-code { max-height: 460px; }
+    .right-card h4 { margin: 0 0 .65rem; color: var(--accent); font-size: .95rem; }
+    .right-card p, .right-card li { margin: 0; color: var(--text-secondary); font-size: .86rem; line-height: 1.5; }
+    .right-card ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .45rem; }
+    .project-header {
+      background: var(--pro-surface); border: 1px solid var(--sidebar-border); border-radius: 18px; padding: 1.55rem 1.7rem;
+      margin-bottom: 1.1rem; box-shadow: var(--pro-shadow);
+    }
+    .project-breadcrumb {
+      display: inline-flex; gap: .45rem; align-items: center; margin-bottom: 1rem; font-size: .84rem; color: var(--text-secondary);
+      border: 1px solid var(--pro-line); border-radius: 999px; padding: .28rem .75rem; background: rgba(255,255,255,.03);
+    }
+    .project-breadcrumb a { color: var(--text-secondary); }
+    .project-breadcrumb a:hover { color: var(--accent); }
+    .project-block {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 1.55rem;
+      margin-bottom: 1.35rem; opacity: 0; transform: translateY(18px); transition: opacity .45s ease, transform .45s ease;
+    }
+    .project-block.reveal-visible { opacity: 1; transform: translateY(0); }
+    .mini-title {
+      color: var(--accent); margin: 0 0 1rem; font-size: 1.16rem; display: flex; align-items: center; gap: .5rem;
+      padding-bottom: .55rem; border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .mini-title::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--accent); }
+    .project-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .project-gallery-single { grid-template-columns: 1fr; }
+    .project-preview-wrap {
+      width: 100%;
+      height: 420px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      overflow: hidden;
+      position: relative;
+    }
+    .project-preview {
+      width: 1200px;
+      height: 900px;
+      border: 0;
+      background: transparent;
+      transform-origin: top left;
+      will-change: transform;
+      visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .project-preview-wrap.is-ready .project-preview { visibility: visible; }
+    .project-preview-wrap::after { content: none; }
+    .project-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+      background: #000;
+    }
+    .code-sample {
+      margin: 0; white-space: pre-wrap; word-break: break-word; background: rgba(8,14,24,.75); color: #e5e7eb; border-radius: 10px;
+      padding: 1rem; font-size: .9rem; line-height: 1.6; overflow-x: auto; border: 1px solid rgba(255,255,255,.08);
+    }
+    .file-tree { margin: 0; padding-left: 1.1rem; color: var(--text-secondary); font-family: Consolas, "Courier New", monospace; font-size: .84rem; line-height: 1.6; }
+    .file-tree ul { list-style: none; margin: 0; padding-left: 1.2rem; border-left: 1px dashed rgba(255,255,255,.15); }
+    .tree-folder { color: var(--text-primary); font-weight: 600; }
+    .tree-file { background: transparent; border: 0; color: var(--accent); padding: .1rem .25rem; border-radius: 6px; cursor: pointer; font: inherit; text-align: left; }
+    .tree-file:hover { background: rgba(79,209,197,.14); color: var(--text-primary); }
+    .tree-file.is-active { background: rgba(79,209,197,.2); color: var(--text-primary); }
+    .file-viewer { margin-top: 1rem; border: 1px solid var(--pro-line); border-radius: 12px; background: rgba(255,255,255,.02); overflow: hidden; }
+    .file-viewer-head { padding: .65rem .85rem; border-bottom: 1px solid var(--pro-line); color: var(--text-primary); font-size: .86rem; font-weight: 600; background: rgba(255,255,255,.03); }
+    .file-explain { margin: 0; padding: .85rem .9rem; color: var(--text-secondary); font-size: .86rem; line-height: 1.55; border-bottom: 1px solid var(--pro-line); }
+    #file-viewer-code { max-height: 420px; overflow: auto; }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .tech-tag { padding: .35rem .75rem; border-radius: 999px; font-size: .86rem; border: 1px solid var(--sidebar-border); color: var(--accent); }
+    .tech-visual-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; margin-top: .9rem; }
+    .tech-visual { border: 1px solid var(--pro-line); border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, 0.03); }
+    .tech-visual img {
+      width: 100%;
+      height: 110px;
+      object-fit: contain;
+      display: block;
+      border-bottom: 1px solid var(--pro-line);
+      padding: .9rem;
+      background: rgba(0, 0, 0, 0.12);
+    }
+    .tech-visual span { display: block; padding: .55rem .65rem; font-size: .84rem; color: var(--text-secondary); line-height: 1.45; }
+    .section-kpis { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .8rem; margin-top: 1rem; }
+    .kpi { border: 1px solid var(--pro-line); border-radius: 12px; padding: .85rem; text-align: center; background: rgba(255,255,255,.025); }
+    .kpi strong { display: block; color: var(--accent); font-size: 1.35rem; margin-bottom: .2rem; }
+    .kpi span { color: var(--text-secondary); font-size: .84rem; }
+    .scroll-top-btn {
+      position: fixed; right: 1.15rem; bottom: 1.15rem; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(79,209,197,.45);
+      background: rgba(8,14,24,.85); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+      cursor: pointer; z-index: 2500; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+    }
+    .scroll-top-btn.is-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .hero-buttons { margin-top: 1.4rem !important; padding-top: 1rem; border-top: 1px solid var(--pro-line); justify-content: flex-start; }
+    @media (max-width: 900px) {
+      .project-layout, .project-gallery { grid-template-columns: 1fr; }
+      .project-aside, .project-right { position: static; }
+      .section-kpis { grid-template-columns: 1fr; }
+      .main-content .section { padding: 1.25rem 1rem 2rem; }
+      .project-block { padding: 1.25rem 1.1rem; }
+      .project-preview-wrap { height: 320px; }
+      .tech-visual-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .tech-visual-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="main-content" style="margin-left:0; width:100%;">
+    <section class="section" style="min-height:auto;">
+      <div class="project-wrap">
+        <header class="project-header reveal">
+          <nav class="project-breadcrumb" aria-label="Fil d'Ariane">
+            <a href="index.html">Accueil</a><span>/</span><a href="index.html#projets">Projets</a><span>/</span><span>WeatherApp Master</span>
+          </nav>
+          <h1 class="section-title" style="margin-bottom:.7rem;">WeatherApp Master (Node.js)</h1>
+          <p class="section-text" style="margin:0;">
+            Application web météo qui affiche les conditions locales en direct et conserve un historique des relevés.
+          </p>
+          <div class="section-kpis">
+            <div class="kpi"><strong>GPS</strong><span>Position utilisateur</span></div>
+            <div class="kpi"><strong>API</strong><span>Météo + air quality</span></div>
+            <div class="kpi"><strong>SQLite</strong><span>Historique local</span></div>
+          </div>
+        </header>
+
+        <div class="project-layout">
+          <aside class="project-aside reveal">
+            <h3>Sommaire du projet</h3>
+            <ul class="project-toc">
+              <li><a href="#presentation">1) Présentation</a></li>
+              <li><a href="#arbo">2) Arbre des fichiers</a></li>
+              <li><a href="#apercu">3) Aperçu visuel</a></li>
+              <li><a href="#features">4) Éléments importants</a></li>
+              <li><a href="#backend">5) Architecture côté serveur</a></li>
+              <li><a href="#frontend">6) Expérience utilisateur</a></li>
+              <li><a href="#tech">7) Technologies</a></li>
+              <li><a href="#conclusion">8) Conclusion</a></li>
+            </ul>
+          </aside>
+
+          <div class="project-main">
+            <div class="project-block reveal" id="presentation">
+              <h2 class="mini-title">1) Présentation du projet</h2>
+              <p class="section-text" style="margin-bottom:.7rem;">
+                WeatherApp Master est un projet de consultation météo orienté usage quotidien : l'utilisateur obtient rapidement
+                la température, la localisation et la qualité de l'air, avec une interface simple.
+              </p>
+              <p class="section-text" style="margin:0;">
+                Côté technique, l'application s'appuie sur Node.js pour exposer les routes et centraliser les appels API.
+                Les données importantes sont enregistrées dans SQLite pour garder une trace des relevés et illustrer un flux complet front/back.
+              </p>
+            </div>
+
+            <div class="project-block reveal code-panel" id="arbo">
+              <h2 class="mini-title">2) Arbre des fichiers</h2>
+              <p class="code-panel-note">Sélectionnez un fichier dans l'arbre à droite pour afficher son rôle.</p>
+              <div class="file-viewer">
+                <div class="file-viewer-head" id="file-viewer-title">index.js</div>
+                <p class="file-explain" id="file-viewer-explain">Cliquez sur un fichier pour voir son rôle.</p>
+                <pre class="code-sample" id="file-viewer-code">// Cliquez sur un fichier de l'arbre.</pre>
+              </div>
+            </div>
+
+            <div class="project-block reveal" id="apercu">
+              <h2 class="mini-title">3) Aperçus visuels du projet</h2>
+              <div class="project-gallery project-gallery-single">
+                <div class="project-preview-wrap">
+                  <video class="project-video" controls preload="metadata" title="Démonstration vidéo WeatherApp Master">
+                    <source src="../WheaterApp-master/Enregistrement de l'écran 2026-05-05 135736.mp4" type="video/mp4">
+                    Votre navigateur ne prend pas en charge la lecture vidéo.
+                  </video>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-block reveal" id="features">
+              <h2 class="mini-title">4) Éléments importants</h2>
+              <ul class="section-text" style="margin:0; padding-left:1.25rem;">
+                <li>Détection de la position utilisateur pour charger automatiquement la météo locale.</li>
+                <li>Récupération des données via API externe (météo + qualité de l'air) et affichage instantané.</li>
+                <li>Enregistrement des relevés dans SQLite via une route API Node.js.</li>
+                <li>Consultation de l'historique pour suivre l'évolution des conditions.</li>
+                <li>Interface responsive pensée pour une lecture rapide des informations utiles.</li>
+              </ul>
+            </div>
+
+            <div class="project-block reveal" id="backend">
+              <h2 class="mini-title">5) Architecture côté serveur</h2>
+              <p class="section-text" style="margin:0;">
+                Le serveur gère les routes principales, appelle les services météo et enregistre les données utiles
+                pour assurer la cohérence entre affichage en direct et historique.
+              </p>
+            </div>
+
+            <div class="project-block reveal" id="frontend">
+              <h2 class="mini-title">6) Expérience utilisateur</h2>
+              <p class="section-text" style="margin:0;">
+                L'interface met en avant les informations météo essentielles et reste simple à lire, sur ordinateur
+                comme sur mobile.
+              </p>
+            </div>
+
+            <div class="project-block reveal" id="tech">
+              <h2 class="mini-title">7) Technologies utilisées</h2>
+              <div class="tech-tags">
+                <span class="tech-tag">Node.js</span>
+                <span class="tech-tag">SQLite3</span>
+                <span class="tech-tag">JavaScript</span>
+                <span class="tech-tag">Bootstrap</span>
+                <span class="tech-tag">WeatherAPI</span>
+              </div>
+              <div class="tech-visual-grid">
+                <article class="tech-visual">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Logo Node.js">
+                  <span><strong>Node.js</strong><br>Gère la logique serveur et les routes API.</span>
+                </article>
+                <article class="tech-visual">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="Logo SQLite">
+                  <span><strong>SQLite</strong><br>Stocke les relevés météo pour l'historique.</span>
+                </article>
+                <article class="tech-visual">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="Logo JavaScript">
+                  <span><strong>JavaScript</strong><br>Met à jour l'interface et les données en direct.</span>
+                </article>
+                <article class="tech-visual">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Logo Bootstrap">
+                  <span><strong>Bootstrap</strong><br>Assure une mise en page claire et responsive.</span>
+                </article>
+                <article class="tech-visual">
+                  <img src="https://cdn-icons-png.flaticon.com/512/2165/2165004.png" alt="Illustration API météo">
+                  <span><strong>WeatherAPI</strong><br>Fournit les données météo et de qualité de l'air.</span>
+                </article>
+              </div>
+            </div>
+
+            <div class="project-block reveal" id="conclusion">
+              <h2 class="mini-title">8) Conclusion</h2>
+              <p class="section-text" style="margin:0;">
+                Ce projet montre ma capacité à construire une application web complète, de la collecte de données externes
+                jusqu'au stockage et à l'affichage côté utilisateur. Il combine des bases solides en API, JavaScript et architecture Node.js.
+              </p>
+            </div>
+
+            <div class="hero-buttons">
+              <a href="../WheaterApp-master/public/index.html" class="hero-btn hero-btn-primary" target="_blank" rel="noopener">Ouvrir le projet</a>
+              <a href="index.html#projets" class="hero-btn hero-btn-outline">Retour aux projets</a>
+            </div>
+          </div>
+
+          <aside class="project-right">
+            <div class="right-card right-card-tree reveal" id="arbo-tree">
+              <h4>Arbre des fichiers</h4>
+              <div class="file-tree">
+                <ul>
+                  <li><span class="tree-folder">WheaterApp-master/</span>
+                    <ul>
+                      <li><button class="tree-file" data-file=".env" type="button">.env</button></li>
+                      <li><button class="tree-file" data-file="index.js" type="button">index.js</button></li>
+                      <li><button class="tree-file" data-file="package.json" type="button">package.json</button></li>
+                      <li><button class="tree-file" data-file="package-lock.json" type="button">package-lock.json</button></li>
+                      <li><button class="tree-file" data-file="nodemon.json" type="button">nodemon.json</button></li>
+                      <li><button class="tree-file" data-file="generate-dossier-tp-pdf.js" type="button">generate-dossier-tp-pdf.js</button></li>
+                      <li><span class="tree-folder">.vscode/</span>
+                        <ul>
+                          <li><button class="tree-file" data-file=".vscode/settings.json" type="button">settings.json</button></li>
+                        </ul>
+                      </li>
+                      <li><span class="tree-folder">public/</span>
+                        <ul>
+                          <li><button class="tree-file" data-file="public/index.html" type="button">index.html</button></li>
+                          <li><button class="tree-file" data-file="public/all.html" type="button">all.html</button></li>
+                          <li><button class="tree-file" data-file="public/style.css" type="button">style.css</button></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="right-card reveal">
+              <h4>Objectif</h4>
+              <p>Proposer une application météo claire, utile et fiable, avec consultation en direct et historique local.</p>
+            </div>
+            <div class="right-card reveal">
+              <h4>Compétences mobilisées</h4>
+              <ul>
+                <li>JavaScript asynchrone (fetch / JSON)</li>
+                <li>Développement back-end avec Node.js</li>
+                <li>Persistance de données avec SQLite</li>
+                <li>Mise à jour dynamique du DOM</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button type="button" class="scroll-top-btn" id="scroll-top-btn" aria-label="Retour en haut">↑</button>
+  <script>
+    (function () {
+      const revealEls = document.querySelectorAll('.reveal');
+      const tocLinks = document.querySelectorAll('.project-toc a');
+      let sectionRefs = [];
+      const scrollTopBtn = document.getElementById('scroll-top-btn');
+      const previewFrames = Array.from(document.querySelectorAll('.js-project-preview'));
+      const treeFiles = Array.from(document.querySelectorAll('.tree-file'));
+      const viewerTitle = document.getElementById('file-viewer-title');
+      const viewerExplain = document.getElementById('file-viewer-explain');
+      const viewerCode = document.getElementById('file-viewer-code');
+      const fileDetails = {
+        ".env": {
+          explain: "Variables d'environnement du projet (ex : clé API). Fichier sensible, à ne pas publier.",
+          code: `WEATHER_API_KEY=***`
+        },
+        "index.js": {
+          explain: "Serveur Node.js principal : routes API, appel WeatherAPI et stockage SQLite.",
+          code: `app.post('/api', (request, response) => {\n  const data = request.body;\n  inserer(data.latitude, data.longitude, data.mood, data.date, data.city, data.country, data.condition, data.temperature, data.defra, data.pm25);\n  response.json({ status: 'success', ...data });\n});`
+        },
+        "package.json": {
+          explain: "Configuration npm du projet (scripts, dépendances, métadonnées).",
+          code: `{\n  "name": "wheaterapp-master",\n  "scripts": {\n    "start": "node index.js",\n    "dev": "nodemon index.js"\n  }\n}`
+        },
+        "package-lock.json": {
+          explain: "Verrouillage des versions de dépendances npm pour des installations reproductibles.",
+          code: `{\n  "name": "wheaterapp-master",\n  "lockfileVersion": 3,\n  "packages": {\n    "...": {}\n  }\n}`
+        },
+        "nodemon.json": {
+          explain: "Configuration du redémarrage automatique du serveur en développement.",
+          code: `{\n  "watch": ["index.js", "public"],\n  "ext": "js,json,html,css"\n}`
+        },
+        "generate-dossier-tp-pdf.js": {
+          explain: "Script utilitaire pour générer un dossier PDF de présentation du projet.",
+          code: `// Script de generation PDF\n// Assemble captures, textes et sections\n// Exporte un document unique`
+        },
+        ".vscode/settings.json": {
+          explain: "Paramètres locaux VS Code/Cursor pour le confort de développement du projet.",
+          code: `{\n  "editor.formatOnSave": true\n}`
+        },
+        "public/index.html": {
+          explain: "Page principale : géolocalisation, affichage météo et envoi des données.",
+          code: `navigator.geolocation.getCurrentPosition(async position => {\n  lat = position.coords.latitude;\n  long = position.coords.longitude;\n  const response = await fetchWithFallback(\`/weather/\${lat}/\${long}\`);\n  const json = await response.json();\n});`
+        },
+        "public/all.html": {
+          explain: "Page historique affichant tous les releves enregistres.",
+          code: `async function loadAllRecords() {\n  const response = await fetchWithFallback('/api');\n  const data = await response.json();\n  displayRecords(data);\n}`
+        },
+        "public/style.css": {
+          explain: "Feuille de style globale de l'application WeatherApp.",
+          code: `body { background-color: #f8f9fa; }\n.container { max-width: 900px; }\n.record-item { border-left: 4px solid #007bff; }`
+        }
+      };
+      async function renderFileDetails(filePath) {
+        if (!viewerTitle || !viewerExplain || !viewerCode) return;
+        const detail = fileDetails[filePath];
+        if (!detail) return;
+        viewerTitle.textContent = filePath;
+        viewerExplain.textContent = detail.explain;
+        viewerCode.textContent = detail.code;
+        treeFiles.forEach(function (btn) { btn.classList.toggle('is-active', btn.dataset.file === filePath); });
+        if (filePath === ".env") return;
+        try {
+          const response = await fetch(encodeURI("../WheaterApp-master/" + filePath));
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          viewerCode.textContent = await response.text();
+        } catch (e) {
+          // Keep fallback snippet if full file loading fails.
+        }
+      }
+      treeFiles.forEach(function (btn) {
+        btn.addEventListener('click', function () { renderFileDetails(btn.dataset.file); });
+      });
+      if (treeFiles.length) renderFileDetails(treeFiles[0].dataset.file);
+
+      function getPageTop(el) {
+        let top = 0;
+        while (el) {
+          top += el.offsetTop || 0;
+          el = el.offsetParent;
+        }
+        return top;
+      }
+
+      function buildSectionRefs() {
+        sectionRefs = [];
+        tocLinks.forEach(function (link) {
+          const href = link.getAttribute('href') || '';
+          const id = href.startsWith('#') ? href.slice(1) : '';
+          if (!id) return;
+          const target = document.getElementById(id);
+          if (!target) return;
+          sectionRefs.push({ id: id, top: getPageTop(target) });
+        });
+      }
+
+      function fitProjectPreview(frame) {
+        if (!frame) return;
+        const wrap = frame.parentElement;
+        if (!wrap) return;
+        try {
+          const doc = frame.contentDocument || (frame.contentWindow && frame.contentWindow.document);
+          if (!doc || !doc.documentElement || !doc.body) return;
+          const contentWidth = Math.max(doc.documentElement.scrollWidth, doc.body.scrollWidth, 1);
+          const contentHeight = Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight, 1);
+          const scaleX = wrap.clientWidth / contentWidth;
+          const scaleY = wrap.clientHeight / contentHeight;
+          const scale = Math.min(scaleX, scaleY);
+          const displayWidth = contentWidth * scale;
+          const displayHeight = contentHeight * scale;
+          const offsetX = Math.max(0, (wrap.clientWidth - displayWidth) / 2);
+          const offsetY = Math.max(0, (wrap.clientHeight - displayHeight) / 2);
+          frame.style.width = contentWidth + 'px';
+          frame.style.height = contentHeight + 'px';
+          frame.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px) scale(' + scale + ')';
+          wrap.classList.add('is-ready');
+        } catch (e) {
+          // Ignore iframe readiness issues.
+        }
+      }
+
+      function fitAllProjectPreviews() {
+        previewFrames.forEach(function (frame) { fitProjectPreview(frame); });
+      }
+
+      if ('IntersectionObserver' in window) {
+        const revealObs = new IntersectionObserver(function (entries) {
+          const visible = entries.filter(function (e) { return e.isIntersecting; });
+          visible.forEach(function (entry, index) {
+            setTimeout(function () {
+              entry.target.classList.add('reveal-visible');
+              revealObs.unobserve(entry.target);
+            }, index * 100);
+          });
+        }, { threshold: 0.15 });
+        revealEls.forEach(function (el) { revealObs.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
+      }
+
+      function setActiveToc() {
+        if (!sectionRefs.length) return;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+        const triggerOffset = 120;
+        const maxScroll = Math.max(0, document.documentElement.scrollHeight - viewportHeight);
+        let currentId = sectionRefs[0].id;
+        let foundByLine = false;
+
+        for (let i = 0; i < sectionRefs.length; i++) {
+          const ref = sectionRefs[i];
+          const el = document.getElementById(ref.id);
+          if (!el) continue;
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= triggerOffset && rect.bottom > triggerOffset) {
+            currentId = ref.id;
+            foundByLine = true;
+            break;
+          }
+        }
+
+        if (!foundByLine) {
+          for (let i = 0; i < sectionRefs.length; i++) {
+            const ref = sectionRefs[i];
+            const el = document.getElementById(ref.id);
+            if (!el) continue;
+            const rect = el.getBoundingClientRect();
+            if (rect.top > triggerOffset && rect.top < viewportHeight) {
+              currentId = ref.id;
+              break;
+            }
+          }
+        }
+
+        if (scrollTop >= (maxScroll - 2)) currentId = sectionRefs[sectionRefs.length - 1].id;
+
+        tocLinks.forEach(function (link) {
+          const id = (link.getAttribute('href') || '').replace('#', '');
+          link.classList.toggle('is-active', id === currentId);
+        });
+      }
+      window.addEventListener('scroll', setActiveToc, { passive: true });
+      window.addEventListener('resize', function () {
+        buildSectionRefs();
+        setActiveToc();
+      });
+      window.addEventListener('load', function () {
+        buildSectionRefs();
+        setActiveToc();
+      });
+      buildSectionRefs();
+      setActiveToc();
+
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+          const href = link.getAttribute('href') || '';
+          if (!href.startsWith('#')) return;
+          event.preventDefault();
+          const target = document.querySelector(href);
+          if (!target) return;
+          target.classList.add('reveal-visible');
+          window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' });
+        });
+      });
+
+      function updateScrollTopButton() {
+        if (!scrollTopBtn) return;
+        scrollTopBtn.classList.toggle('is-visible', window.scrollY > 280);
+      }
+      window.addEventListener('scroll', updateScrollTopButton, { passive: true });
+      updateScrollTopButton();
+      if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', function () {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      previewFrames.forEach(function (frame) {
+        frame.addEventListener('load', function () { fitProjectPreview(frame); });
+      });
+      window.addEventListener('resize', fitAllProjectPreviews);
+      window.addEventListener('load', fitAllProjectPreviews);
+    })();
+  </script>
+</body>
+</html>

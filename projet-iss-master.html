@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet ISS Master - Détail</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .main-content .section { max-width: none; width: 100%; margin: 0; padding: 2rem 2.2rem 3rem; }
+    :root { --pro-surface: rgba(20,25,36,.58); --pro-line: rgba(255,255,255,.08); --pro-shadow: 0 14px 30px rgba(0,0,0,.18); }
+    .project-wrap { width: 100%; position: relative; }
+    .project-layout { display: grid; grid-template-columns: 320px minmax(0,1fr) 320px; gap: 1.4rem; align-items: start; }
+    .project-aside, .right-card {
+      background: var(--pro-surface); border: 1px solid var(--pro-line); border-radius: 14px; box-shadow: var(--pro-shadow);
+    }
+    .project-aside { position: sticky; top: 1rem; padding: 1.15rem; }
+    .project-aside h3 { margin: 0 0 .7rem; font-size: .95rem; color: var(--accent); }
+    .project-toc { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+    .project-toc a {
+      display: block; padding: .42rem .5rem; border-radius: 8px; color: var(--text-secondary); border: 1px solid transparent; font-size: .85rem;
+    }
+    .project-toc a:hover { color: var(--text-primary); background: rgba(255,255,255,.03); }
+    .project-toc a.is-active { color: var(--text-primary); background: rgba(79,209,197,.16); border-color: rgba(79,209,197,.28); }
+    .project-right { position: sticky; top: 1rem; display: grid; gap: 1rem; }
+    .right-card { padding: 1rem; min-height: 170px; display: flex; flex-direction: column; justify-content: center; }
+    .right-card-tree { justify-content: flex-start; min-height: auto; }
+    .right-card-tree .file-tree { font-size: .8rem; }
+    .code-panel-note { margin: 0 0 .8rem; color: var(--text-secondary); font-size: .9rem; }
+    .code-panel #file-viewer-code { max-height: 460px; }
+    .right-card h4 { margin: 0 0 .65rem; color: var(--accent); font-size: .95rem; }
+    .right-card p, .right-card li { margin: 0; color: var(--text-secondary); font-size: .86rem; line-height: 1.5; }
+    .right-card ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .45rem; }
+    .project-header {
+      background: var(--pro-surface); border: 1px solid var(--sidebar-border); border-radius: 18px; padding: 1.55rem 1.7rem;
+      margin-bottom: 1.1rem; box-shadow: var(--pro-shadow);
+    }
+    .project-breadcrumb {
+      display: inline-flex; gap: .45rem; align-items: center; margin-bottom: 1rem; font-size: .84rem; color: var(--text-secondary);
+      border: 1px solid var(--pro-line); border-radius: 999px; padding: .28rem .75rem; background: rgba(255,255,255,.03);
+    }
+    .project-breadcrumb a { color: var(--text-secondary); }
+    .project-breadcrumb a:hover { color: var(--accent); }
+    .project-block {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 1.55rem;
+      margin-bottom: 1.35rem; opacity: 0; transform: translateY(18px); transition: opacity .45s ease, transform .45s ease;
+    }
+    .project-block.reveal-visible { opacity: 1; transform: translateY(0); }
+    .mini-title {
+      color: var(--accent); margin: 0 0 1rem; font-size: 1.16rem; display: flex; align-items: center; gap: .5rem; padding-bottom: .55rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .mini-title::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--accent); }
+    .project-preview-wrap {
+      width: 100%;
+      height: 520px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      overflow: hidden;
+      position: relative;
+    }
+    .project-preview {
+      width: 1200px;
+      height: 900px;
+      border: 0;
+      background: transparent;
+      transform-origin: top left;
+      will-change: transform;
+      visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .project-preview-wrap.is-ready .project-preview { visibility: visible; }
+    .project-preview-wrap::after { content: none; }
+    .project-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+      background: #000;
+    }
+    .code-sample {
+      margin: 0; white-space: pre-wrap; word-break: break-word; background: rgba(8,14,24,.75); color: #e5e7eb; border-radius: 10px;
+      padding: 1rem; font-size: .9rem; line-height: 1.6; overflow-x: auto; border: 1px solid rgba(255,255,255,.08);
+    }
+    .file-tree { margin: 0; padding-left: 1.1rem; color: var(--text-secondary); font-family: Consolas, "Courier New", monospace; font-size: .84rem; line-height: 1.6; }
+    .file-tree ul { list-style: none; margin: 0; padding-left: 1.2rem; border-left: 1px dashed rgba(255,255,255,.15); }
+    .tree-folder { color: var(--text-primary); font-weight: 600; }
+    .tree-file { background: transparent; border: 0; color: var(--accent); padding: .1rem .25rem; border-radius: 6px; cursor: pointer; font: inherit; text-align: left; }
+    .tree-file:hover { background: rgba(79,209,197,.14); color: var(--text-primary); }
+    .tree-file.is-active { background: rgba(79,209,197,.2); color: var(--text-primary); }
+    .file-viewer { margin-top: 1rem; border: 1px solid var(--pro-line); border-radius: 12px; background: rgba(255,255,255,.02); overflow: hidden; }
+    .file-viewer-head { padding: .65rem .85rem; border-bottom: 1px solid var(--pro-line); color: var(--text-primary); font-size: .86rem; font-weight: 600; background: rgba(255,255,255,.03); }
+    .file-explain { margin: 0; padding: .85rem .9rem; color: var(--text-secondary); font-size: .86rem; line-height: 1.55; border-bottom: 1px solid var(--pro-line); }
+    #file-viewer-code { max-height: 420px; overflow: auto; }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .tech-tag { padding: .35rem .75rem; border-radius: 999px; font-size: .86rem; border: 1px solid var(--sidebar-border); color: var(--accent); }
+    .tech-visual-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; margin-top: .9rem; }
+    .tech-visual { border: 1px solid var(--pro-line); border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, 0.03); }
+    .tech-visual img {
+      width: 100%;
+      height: 110px;
+      object-fit: contain;
+      display: block;
+      border-bottom: 1px solid var(--pro-line);
+      padding: .9rem;
+      background: rgba(0, 0, 0, 0.12);
+    }
+    .tech-visual span { display: block; padding: .55rem .65rem; font-size: .84rem; color: var(--text-secondary); line-height: 1.45; }
+    .feature-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .7rem; }
+    .feature-list li { display: flex; align-items: flex-start; gap: .55rem; }
+    .feature-icon {
+      width: 1.45rem;
+      height: 1.45rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(79,209,197,.16);
+      border: 1px solid rgba(79,209,197,.28);
+      flex: 0 0 1.45rem;
+      line-height: 1;
+    }
+    .section-kpis { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .8rem; margin-top: 1rem; }
+    .kpi { border: 1px solid var(--pro-line); border-radius: 12px; padding: .85rem; text-align: center; background: rgba(255,255,255,.025); }
+    .kpi strong { display: block; color: var(--accent); font-size: 1.35rem; margin-bottom: .2rem; }
+    .kpi span { color: var(--text-secondary); font-size: .84rem; }
+    .scroll-top-btn {
+      position: fixed; right: 1.15rem; bottom: 1.15rem; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(79,209,197,.45);
+      background: rgba(8,14,24,.85); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+      cursor: pointer; z-index: 2500; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+    }
+    .scroll-top-btn.is-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .hero-buttons { margin-top: 1.4rem !important; padding-top: 1rem; border-top: 1px solid var(--pro-line); justify-content: flex-start; }
+    @media (max-width: 900px) {
+      .project-layout { grid-template-columns: 1fr; }
+      .project-aside, .project-right { position: static; }
+      .section-kpis { grid-template-columns: 1fr; }
+      .main-content .section { padding: 1.25rem 1rem 2rem; }
+      .project-block { padding: 1.25rem 1.1rem; }
+      .project-preview-wrap { height: 420px; }
+      .tech-visual-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .tech-visual-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="main-content" style="margin-left:0; width:100%;">
+    <section class="section" style="min-height:auto;">
+      <div class="project-wrap">
+        <header class="project-header reveal">
+          <nav class="project-breadcrumb" aria-label="Fil d'Ariane">
+            <a href="index.html">Accueil</a><span>/</span><a href="index.html#projets">Projets</a><span>/</span><span>ISS Master</span>
+          </nav>
+          <h1 class="section-title" style="margin-bottom:.7rem;">Suivi de l'ISS en temps réel (ISS Master)</h1>
+          <p class="section-text" style="margin:0;">
+            Application web qui suit la position de l'ISS en direct et la visualise sur une carte interactive.
+          </p>
+          <div class="section-kpis">
+            <div class="kpi"><strong>API</strong><span>Données live ISS</span></div>
+            <div class="kpi"><strong>1s</strong><span>Rafraîchissement auto</span></div>
+            <div class="kpi"><strong>Leaflet</strong><span>Carte interactive</span></div>
+          </div>
+        </header>
+
+        <div class="project-layout">
+          <aside class="project-aside reveal">
+            <h3>Sommaire du projet</h3>
+            <ul class="project-toc">
+              <li><a href="#presentation">1) Présentation</a></li>
+              <li><a href="#apercu">2) Aperçu visuel</a></li>
+              <li><a href="#features">3) Fonctionnalités clés</a></li>
+              <li><a href="#arbo">4) Arbre des fichiers</a></li>
+              <li><a href="#code">5) Points à améliorer</a></li>
+              <li><a href="#tech">6) Technologies</a></li>
+              <li><a href="#conclusion">7) Conclusion</a></li>
+            </ul>
+          </aside>
+
+          <div class="project-main">
+            <div class="project-block reveal" id="presentation">
+              <h2 class="mini-title">1) Présentation du projet</h2>
+              <p class="section-text" style="margin-bottom:.7rem;">
+                ISS Master est un projet de visualisation en temps réel qui permet de suivre la Station spatiale internationale
+                de manière simple et pédagogique.
+              </p>
+              <p class="section-text" style="margin:0;">
+                Techniquement, il exploite une API publique, traite le JSON en JavaScript et met à jour l'interface
+                ainsi que la carte Leaflet en continu pour garder un affichage synchronisé.
+              </p>
+            </div>
+
+            <div class="project-block reveal" id="apercu">
+              <h2 class="mini-title">2) Aperçu visuel du projet</h2>
+              <div class="project-preview-wrap" id="project-preview-wrap">
+                <img class="project-cover" src="../iss-master/Capture d'écran 2026-05-05 141517.png" alt="Aperçu visuel du projet ISS Master">
+              </div>
+            </div>
+
+            <div class="project-block reveal" id="features">
+              <h2 class="mini-title">3) Fonctionnalités clés</h2>
+              <ul class="section-text feature-list">
+                <li><span class="feature-icon" aria-hidden="true">🛰️</span><span>Affichage en direct des principales données orbitales (latitude, longitude, altitude, vitesse).</span></li>
+                <li><span class="feature-icon" aria-hidden="true">⏱️</span><span>Actualisation automatique régulière pour conserver un suivi fluide.</span></li>
+                <li><span class="feature-icon" aria-hidden="true">🗺️</span><span>Visualisation de la position sur carte Leaflet avec déplacement du marqueur.</span></li>
+                <li><span class="feature-icon" aria-hidden="true">📊</span><span>Interface lisible qui met en avant les informations utiles.</span></li>
+              </ul>
+            </div>
+
+            <div class="project-block reveal code-panel" id="arbo">
+              <h2 class="mini-title">4) Arbre des fichiers</h2>
+              <p class="code-panel-note">Sélectionnez un fichier dans l'arbre à droite pour afficher son rôle.</p>
+              <div class="file-viewer">
+                <div class="file-viewer-head" id="file-viewer-title">index.html</div>
+                <p class="file-explain" id="file-viewer-explain">Cliquez sur un fichier pour voir son rôle.</p>
+                <pre class="code-sample" id="file-viewer-code">// Cliquez sur un fichier de l'arbre.</pre>
+              </div>
+            </div>
+
+            <div class="project-block reveal" id="code">
+              <h2 class="mini-title">5) Points à améliorer</h2>
+              <ul class="section-text" style="margin:0; padding-left:1.25rem;">
+                <li>🎨 Colorer le pays sur la carte quand l'ISS passe au-dessus.</li>
+                <li>🌍 Afficher le nom du pays/océan actuellement survolé.</li>
+                <li>📍 Tracer une petite trajectoire des dernières minutes.</li>
+                <li>🔔 Ajouter une alerte quand l'ISS approche d'une zone choisie.</li>
+              </ul>
+            </div>
+
+            <div class="project-block reveal" id="tech">
+              <h2 class="mini-title">6) Technologies utilisées</h2>
+              <div class="tech-tags">
+                <span class="tech-tag">HTML</span>
+                <span class="tech-tag">CSS</span>
+                <span class="tech-tag">JavaScript</span>
+                <span class="tech-tag">API ISS</span>
+              </div>
+              <div class="tech-visual-grid">
+                <article class="tech-visual">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="Logo HTML5">
+                  <span><strong>HTML5</strong><br>Structure des pages du projet ISS.</span>
+                </article>
+                <article class="tech-visual">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="Logo CSS3">
+                  <span><strong>CSS3</strong><br>Mise en page et style responsive.</span>
+                </article>
+                <article class="tech-visual">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="Logo JavaScript">
+                  <span><strong>JavaScript</strong><br>Récupération API et mise à jour en temps réel.</span>
+                </article>
+                <article class="tech-visual">
+                  <img src="../iss-master/Capture d'écran 2026-05-05 141517.png" alt="Illustration API ISS">
+                  <span><strong>API ISS</strong><br>Données live de latitude, longitude, altitude et vitesse.</span>
+                </article>
+              </div>
+            </div>
+
+            <div class="project-block reveal" id="conclusion">
+              <h2 class="mini-title">7) Conclusion</h2>
+              <p class="section-text" style="margin:0;">
+                Ce projet illustre ma capacité à exploiter des données externes en temps réel et à les transformer
+                en visualisation claire pour l'utilisateur. Il met en pratique JavaScript asynchrone et cartographie web.
+              </p>
+            </div>
+
+            <div class="hero-buttons">
+              <a href="../iss-master/index.html" class="hero-btn hero-btn-primary" target="_blank" rel="noopener">Ouvrir le projet</a>
+              <a href="index.html#projets" class="hero-btn hero-btn-outline">Retour aux projets</a>
+            </div>
+          </div>
+
+          <aside class="project-right">
+            <div class="right-card right-card-tree reveal" id="arbo-tree">
+              <h4>Arbre des fichiers</h4>
+              <div class="file-tree">
+                <ul>
+                  <li><span class="tree-folder">iss-master/</span>
+                    <ul>
+                      <li><button class="tree-file" data-file="index.html" type="button">index.html</button></li>
+                      <li><button class="tree-file" data-file="index.js" type="button">index.js</button></li>
+                      <li><button class="tree-file" data-file="style.css" type="button">style.css</button></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="right-card reveal">
+              <h4>Objectif</h4>
+              <p>Fournir un suivi clair et en direct de l'ISS via une interface web simple et dynamique.</p>
+            </div>
+            <div class="right-card reveal">
+              <h4>Compétences mobilisées</h4>
+              <ul>
+                <li>Intégration d'API REST</li>
+                <li>Traitement JSON en JavaScript</li>
+                <li>Mise à jour de l'interface en temps réel</li>
+                <li>Cartographie interactive Leaflet</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button type="button" class="scroll-top-btn" id="scroll-top-btn" aria-label="Retour en haut">↑</button>
+  <script>
+    (function () {
+      const THEME_STORAGE_KEY = 'portfolio-theme';
+      try {
+        const isLight = window.localStorage && localStorage.getItem(THEME_STORAGE_KEY) === 'light';
+        document.body.classList.toggle('theme-light', isLight);
+      } catch (e) {
+        // Ignore localStorage errors and keep default theme.
+      }
+
+      const revealEls = document.querySelectorAll('.reveal');
+      const tocLinks = document.querySelectorAll('.project-toc a');
+      let sectionRefs = [];
+      const scrollTopBtn = document.getElementById('scroll-top-btn');
+      const previewWrap = document.getElementById('project-preview-wrap');
+      const previewFrame = document.getElementById('project-preview');
+      const treeFiles = Array.from(document.querySelectorAll('.tree-file'));
+      const viewerTitle = document.getElementById('file-viewer-title');
+      const viewerExplain = document.getElementById('file-viewer-explain');
+      const viewerCode = document.getElementById('file-viewer-code');
+      const fileDetails = {
+        "index.html": {
+          explain: "Page principale de l'interface ISS avec les indicateurs et la carte.",
+          code: `<main class="container">\n  <header class="hero">...</header>\n  <section class="stats">...</section>\n  <section class="map-card"><div id="issMap"></div></section>\n</main>`
+        },
+        "index.js": {
+          explain: "Logique JavaScript du suivi en temps réel (API ISS + interface + Leaflet).",
+          code: `const api_url = 'https://api.wheretheiss.at/v1/satellites/25544';\nasync function GetISS() {\n  const data = await (await fetch(api_url)).json();\n  marker.setLatLng([data.latitude, data.longitude]);\n}\nsetInterval(GetISS, 1000);`
+        },
+        "style.css": {
+          explain: "Styles visuels de la page ISS (thème, cartes stats, responsive).",
+          code: `body { background: linear-gradient(160deg, var(--bg-start), var(--bg-end)); }\n.hero { background: url("Capture d'écran 2026-05-05 141517.png") center/cover; }\n.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }`
+        }
+      };
+      async function renderFileDetails(filePath) {
+        if (!viewerTitle || !viewerExplain || !viewerCode) return;
+        const detail = fileDetails[filePath];
+        if (!detail) return;
+        viewerTitle.textContent = filePath;
+        viewerExplain.textContent = detail.explain;
+        viewerCode.textContent = detail.code;
+        treeFiles.forEach(function (btn) { btn.classList.toggle('is-active', btn.dataset.file === filePath); });
+        try {
+          const response = await fetch(encodeURI("../iss-master/" + filePath));
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          let fileContent = await response.text();
+          if (filePath === "index.html") {
+            fileContent = fileContent.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
+          }
+          viewerCode.textContent = fileContent.trim();
+        } catch (e) {
+          // Keep fallback snippet if full file loading fails.
+        }
+      }
+      treeFiles.forEach(function (btn) {
+        btn.addEventListener('click', function () { renderFileDetails(btn.dataset.file); });
+      });
+      if (treeFiles.length) renderFileDetails(treeFiles[0].dataset.file);
+
+      function fitProjectPreview() {
+        if (!previewWrap || !previewFrame) return;
+        try {
+          const doc = previewFrame.contentDocument || (previewFrame.contentWindow && previewFrame.contentWindow.document);
+          if (!doc || !doc.documentElement || !doc.body) return;
+          const contentWidth = Math.max(doc.documentElement.scrollWidth, doc.body.scrollWidth, 1);
+          const contentHeight = Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight, 1);
+          const scaleX = previewWrap.clientWidth / contentWidth;
+          const scaleY = previewWrap.clientHeight / contentHeight;
+          const scale = Math.min(scaleX, scaleY);
+          const displayWidth = contentWidth * scale;
+          const displayHeight = contentHeight * scale;
+          const offsetX = Math.max(0, (previewWrap.clientWidth - displayWidth) / 2);
+          const offsetY = Math.max(0, (previewWrap.clientHeight - displayHeight) / 2);
+          previewFrame.style.width = contentWidth + 'px';
+          previewFrame.style.height = contentHeight + 'px';
+          previewFrame.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px) scale(' + scale + ')';
+          previewWrap.classList.add('is-ready');
+        } catch (e) {
+          // Ignore cross-origin or iframe readiness issues.
+        }
+      }
+
+      function buildSectionRefs() {
+        sectionRefs = [];
+        tocLinks.forEach(function (link) {
+          const href = link.getAttribute('href') || '';
+          const id = href.startsWith('#') ? href.slice(1) : '';
+          if (!id) return;
+          const target = document.getElementById(id);
+          if (!target) return;
+          sectionRefs.push({ id: id, el: target });
+        });
+      }
+
+      if ('IntersectionObserver' in window) {
+        const revealObs = new IntersectionObserver(function (entries) {
+          const visible = entries.filter(function (e) { return e.isIntersecting; });
+          visible.forEach(function (entry, index) {
+            setTimeout(function () {
+              entry.target.classList.add('reveal-visible');
+              revealObs.unobserve(entry.target);
+            }, index * 100);
+          });
+        }, { threshold: 0.15 });
+        revealEls.forEach(function (el) { revealObs.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
+      }
+
+      function setActiveToc() {
+        if (!sectionRefs.length) return;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        const triggerY = scrollTop + 140;
+        const maxScroll = Math.max(0, document.documentElement.scrollHeight - (window.innerHeight || 0));
+        let currentId = sectionRefs[0].id;
+
+        sectionRefs.forEach(function (ref) {
+          const rect = ref.el.getBoundingClientRect();
+          const sectionTop = rect.top + scrollTop;
+          if (sectionTop <= triggerY) currentId = ref.id;
+        });
+
+        if (scrollTop >= (maxScroll - 2)) currentId = sectionRefs[sectionRefs.length - 1].id;
+
+        tocLinks.forEach(function (link) {
+          const id = (link.getAttribute('href') || '').replace('#', '');
+          link.classList.toggle('is-active', id === currentId);
+        });
+      }
+      function refreshTocSpy() {
+        buildSectionRefs();
+        setActiveToc();
+      }
+      window.addEventListener('scroll', setActiveToc, { passive: true });
+      window.addEventListener('resize', refreshTocSpy);
+      window.addEventListener('load', refreshTocSpy);
+      window.addEventListener('resize', fitProjectPreview);
+      window.addEventListener('load', fitProjectPreview);
+      refreshTocSpy();
+      if (previewFrame) {
+        previewFrame.addEventListener('load', fitProjectPreview);
+      }
+
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+          const href = link.getAttribute('href') || '';
+          if (!href.startsWith('#')) return;
+          event.preventDefault();
+          const target = document.querySelector(href);
+          if (!target) return;
+          target.classList.add('reveal-visible');
+          window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' });
+        });
+      });
+
+      function updateScrollTopButton() {
+        if (!scrollTopBtn) return;
+        scrollTopBtn.classList.toggle('is-visible', window.scrollY > 280);
+      }
+      window.addEventListener('scroll', updateScrollTopButton, { passive: true });
+      updateScrollTopButton();
+      if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', function () {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

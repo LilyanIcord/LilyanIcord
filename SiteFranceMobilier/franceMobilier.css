@@ -1,0 +1,97 @@
+﻿/* -------------------------- Positionnement des blocs ------------------------------------- */
+body 
+{
+    margin:0 auto 0 auto; /* auto pour left et right --> la div bloc-page sera centrée */
+	background-color:White;
+    width:1000px;
+}
+#bloc-haut
+{
+    position:fixed;
+    width:1000px;
+    height:15%;
+	background-color:royalblue;
+    text-align:center;
+    z-index:2;
+}
+#bloc-haut h1
+{
+	margin-left:200px;
+}
+#bloc-page
+{
+    position:absolute; /* pour que ce bloc soit parent des blocs menu et contenu */
+    width:1000px;
+    min-height:85%; /* hauteur mini de ce bloc : hauteur de la fenêtre */
+    top:15%;
+    z-index:1;
+}
+#bloc-menu 
+{
+	padding-top:10px;
+    position:fixed; /* Le menu reste en haut à gauche du bloc page (son bloc parent) */
+    width:200px; /* 20% du bloc page ne fonctionne pas correctement et prend 20% de la fenêtre (cela fonctionne en absolute) */
+    height:100%; /* 100 % de la fenêtre */
+	background-color:royalblue;
+}
+#bloc-contenu 
+{
+	padding-top:10px;
+    position:absolute; /* Position absolue dans le bloc page (son bloc parent) */
+    left:20%; /* Bord gauche à 20 % du bloc page (son bloc parent) */
+    text-align:center; /* Les éléments de contenu seront centrés à l'intérieur du bloc */
+    width:80%; /* 80 % du bloc page (son bloc parent) */
+    min-height:100%; /* hauteur mini de ce bloc : hauteur du bloc page */
+	background-color:skyblue;
+}
+
+/* ----------------------- Définition des styles -------------------------------------------- */
+#bloc-menu a, #bloc-menu form
+{
+    margin-left:10px;
+}
+#bloc-menu hr
+{
+    width:90%;
+    text-align:center;
+	color:skyblue;
+}
+#bloc-menu input, #bloc-menu select, #bloc-menu option
+{
+	background-color:skyblue;
+}
+#bloc-menu input
+{
+    margin-top:10px;
+}
+#bloc-contenu h2
+{
+	text-align:left;
+    margin-left:5%;
+	color:royalblue;
+}
+#bloc-contenu form
+{
+	text-align:left;
+    margin-left:5%;
+	margin-top:10px;
+}
+#bloc-contenu input, #bloc-contenu select
+{
+	margin-bottom:10px;
+}
+.tableau
+{
+    width:90%;
+    margin:auto;
+    border-collapse:collapse;
+}
+.tableau th
+{
+	color:royalblue;
+}
+.tableau td
+{
+	border:1px solid royalblue;
+    padding:10px;
+}

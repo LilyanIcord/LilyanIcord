@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet SiteFranceMobilier - Détail</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .main-content .section { max-width: none; width: 100%; margin: 0; padding: 2rem 2.2rem 3rem; }
+    :root { --pro-surface: rgba(20,25,36,.58); --pro-line: rgba(255,255,255,.08); --pro-shadow: 0 14px 30px rgba(0,0,0,.18); }
+    .project-wrap { width: 100%; position: relative; }
+    .project-layout { display: grid; grid-template-columns: 320px minmax(0,1fr) 320px; gap: 1.4rem; align-items: start; }
+    .project-aside, .right-card { background: var(--pro-surface); border: 1px solid var(--pro-line); border-radius: 14px; box-shadow: var(--pro-shadow); }
+    .project-aside { position: sticky; top: 1rem; padding: 1.15rem; }
+    .project-aside h3 { margin: 0 0 .7rem; font-size: .95rem; color: var(--accent); }
+    .project-toc { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+    .project-toc a { display: block; padding: .42rem .5rem; border-radius: 8px; color: var(--text-secondary); border: 1px solid transparent; font-size: .85rem; }
+    .project-toc a:hover { color: var(--text-primary); background: rgba(255,255,255,.03); }
+    .project-toc a.is-active { color: var(--text-primary); background: rgba(79,209,197,.16); border-color: rgba(79,209,197,.28); }
+    .project-right { position: sticky; top: 1rem; display: grid; gap: 1rem; }
+    .right-card { padding: 1rem; min-height: 170px; display: flex; flex-direction: column; justify-content: center; }
+    .right-card-tree { justify-content: flex-start; min-height: auto; }
+    .right-card-tree .file-tree { font-size: .8rem; }
+    .code-panel-note { margin: 0 0 .8rem; color: var(--text-secondary); font-size: .9rem; }
+    .code-panel #file-viewer-code { max-height: 460px; }
+    .right-card h4 { margin: 0 0 .65rem; color: var(--accent); font-size: .95rem; }
+    .right-card p, .right-card li { margin: 0; color: var(--text-secondary); font-size: .86rem; line-height: 1.5; }
+    .right-card ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .45rem; }
+    .project-header {
+      background: var(--pro-surface); border: 1px solid var(--sidebar-border); border-radius: 18px; padding: 1.55rem 1.7rem;
+      margin-bottom: 1.1rem; box-shadow: var(--pro-shadow);
+    }
+    .project-breadcrumb {
+      display: inline-flex; gap: .45rem; align-items: center; margin-bottom: 1rem; font-size: .84rem; color: var(--text-secondary);
+      border: 1px solid var(--pro-line); border-radius: 999px; padding: .28rem .75rem; background: rgba(255,255,255,.03);
+    }
+    .project-breadcrumb a { color: var(--text-secondary); }
+    .project-breadcrumb a:hover { color: var(--accent); }
+    .project-block {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 1.55rem;
+      margin-bottom: 1.35rem; opacity: 0; transform: translateY(18px); transition: opacity .45s ease, transform .45s ease;
+    }
+    .project-block.reveal-visible { opacity: 1; transform: translateY(0); }
+    .mini-title {
+      color: var(--accent); margin: 0 0 1rem; font-size: 1.16rem; display: flex; align-items: center; gap: .5rem;
+      padding-bottom: .55rem; border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .mini-title::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--accent); }
+    .code-sample {
+      margin: 0; white-space: pre-wrap; word-break: break-word; background: rgba(8,14,24,.75); color: #e5e7eb; border-radius: 10px;
+      padding: 1rem; font-size: .9rem; line-height: 1.6; overflow-x: auto; border: 1px solid rgba(255,255,255,.08);
+    }
+    .file-tree {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: var(--text-secondary);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: .84rem;
+      line-height: 1.6;
+    }
+    .file-tree ul {
+      list-style: none;
+      margin: 0;
+      padding-left: 1.2rem;
+      border-left: 1px dashed rgba(255,255,255,.15);
+    }
+    .file-tree > li > ul {
+      margin-top: .35rem;
+    }
+    .tree-folder {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .tree-file {
+      background: transparent;
+      border: 0;
+      color: var(--accent);
+      padding: .1rem .25rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+    }
+    .tree-file:hover {
+      background: rgba(79,209,197,.14);
+      color: var(--text-primary);
+    }
+    .tree-file.is-active {
+      background: rgba(79,209,197,.2);
+      color: var(--text-primary);
+    }
+    .file-viewer {
+      margin-top: 1rem;
+      border: 1px solid var(--pro-line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.02);
+      overflow: hidden;
+    }
+    .file-viewer-head {
+      padding: .65rem .85rem;
+      border-bottom: 1px solid var(--pro-line);
+      color: var(--text-primary);
+      font-size: .86rem;
+      font-weight: 600;
+      background: rgba(255,255,255,.03);
+    }
+    .file-explain {
+      margin: 0;
+      padding: .85rem .9rem;
+      color: var(--text-secondary);
+      font-size: .86rem;
+      line-height: 1.55;
+      border-bottom: 1px solid var(--pro-line);
+    }
+    #file-viewer-code { max-height: 420px; overflow: auto; }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .video-card {
+      border: 1px solid var(--pro-line);
+      border-radius: 12px;
+      padding: .8rem;
+      background: rgba(255,255,255,.02);
+    }
+    .video-card h3 {
+      margin: 0 0 .65rem;
+      font-size: .95rem;
+      color: var(--text-primary);
+    }
+    .video-card video {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: #000;
+      display: block;
+    }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .tech-tag { padding: .35rem .75rem; border-radius: 999px; font-size: .86rem; border: 1px solid var(--sidebar-border); color: var(--accent); }
+    .section-kpis { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .8rem; margin-top: 1rem; }
+    .kpi { border: 1px solid var(--pro-line); border-radius: 12px; padding: .85rem; text-align: center; background: rgba(255,255,255,.025); }
+    .kpi strong { display: block; color: var(--accent); font-size: 1.35rem; margin-bottom: .2rem; }
+    .kpi span { color: var(--text-secondary); font-size: .84rem; }
+    .scroll-top-btn {
+      position: fixed; right: 1.15rem; bottom: 1.15rem; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(79,209,197,.45);
+      background: rgba(8,14,24,.85); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+      cursor: pointer; z-index: 2500; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+    }
+    .scroll-top-btn.is-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .hero-buttons { margin-top: 1.4rem !important; padding-top: 1rem; border-top: 1px solid var(--pro-line); justify-content: flex-start; }
+    @media (max-width: 900px) {
+      .project-layout { grid-template-columns: 1fr; }
+      .project-aside, .project-right { position: static; }
+      .section-kpis { grid-template-columns: 1fr; }
+      .main-content .section { padding: 1.25rem 1rem 2rem; }
+      .project-block { padding: 1.25rem 1.1rem; }
+      .video-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="main-content" style="margin-left:0; width:100%;">
+    <section class="section" style="min-height:auto;">
+      <div class="project-wrap">
+        <header class="project-header reveal">
+          <nav class="project-breadcrumb" aria-label="Fil d'Ariane">
+            <a href="index.html">Accueil</a><span>/</span><a href="index.html#projets">Projets</a><span>/</span><span>SiteFranceMobilier</span>
+          </nav>
+          <h1 class="section-title" style="margin-bottom:.7rem;">SiteFranceMobilier (PHP / MVC)</h1>
+          <p class="section-text" style="margin:0;">
+            Application catalogue orientée mobilier, avec navigation filtrée et gestion d'abonnement newsletter.
+          </p>
+          <div class="section-kpis">
+            <div class="kpi"><strong>MVC</strong><span>Organisation claire</span></div>
+            <div class="kpi"><strong>Filtrage</strong><span>Catégorie + gamme</span></div>
+            <div class="kpi"><strong>Newsletter</strong><span>Inscription abonnés</span></div>
+          </div>
+        </header>
+
+        <div class="project-layout">
+          <aside class="project-aside reveal">
+            <h3>Sommaire du projet</h3>
+            <ul class="project-toc">
+              <li><a href="#presentation">1) Présentation</a></li>
+              <li><a href="#arborescence">2) Arbre des fichiers</a></li>
+              <li><a href="#menu">3) Menu et filtres</a></li>
+              <li><a href="#produits">4) Consultation produits</a></li>
+              <li><a href="#abonne">5) Gestion abonnement</a></li>
+              <li><a href="#videos">6) Démonstrations vidéo</a></li>
+              <li><a href="#mail">7) Confirmation d'inscription</a></li>
+              <li><a href="#points-cles">8) Points techniques clés</a></li>
+              <li><a href="#tech">9) Technologies</a></li>
+              <li><a href="#conclusion">10) Conclusion</a></li>
+            </ul>
+          </aside>
+
+          <div class="project-main">
+            <div class="project-block reveal" id="presentation">
+              <h2 class="mini-title">1) Présentation du projet</h2>
+              <p class="section-text" style="margin-bottom:.7rem;">
+                SiteFranceMobilier est un projet web de présentation et consultation de produits, pensé pour
+                guider l'utilisateur dans le catalogue via des filtres simples.
+              </p>
+              <p class="section-text" style="margin:0;">
+                Côté technique, le projet suit une architecture <strong>MVC</strong> avec un front controller PHP.
+                Il inclut aussi un parcours d'abonnement complet à une lettre d'information (saisie, validation, e-mail de confirmation).
+              </p>
+            </div>
+
+            <div class="project-block reveal code-panel" id="arborescence">
+              <h2 class="mini-title">2) Arbre des fichiers</h2>
+              <p class="code-panel-note">Sélectionnez un fichier dans l'arbre à droite pour afficher son rôle.</p>
+              <div class="file-viewer">
+                <div class="file-viewer-head" id="file-viewer-title">index.php</div>
+                <p class="file-explain" id="file-viewer-explain">Cliquez sur un fichier pour voir son rôle.</p>
+                <pre class="code-sample" id="file-viewer-code">// Cliquez sur un fichier de l'arbre.</pre>
+              </div>
+            </div>
+
+            <div class="project-block reveal" id="menu">
+              <h2 class="mini-title">3) Menu et filtres dynamiques</h2>
+              <p class="section-text" style="margin-bottom:.7rem;">
+                Le menu latéral charge les catégories et les gammes depuis les modèles, puis envoie les
+                critères au contrôleur de consultation.
+              </p>
+            </div>
+
+            <div class="project-block reveal" id="produits">
+              <h2 class="mini-title">4) Consultation des produits</h2>
+              <p class="section-text" style="margin-bottom:.7rem;">
+                Le contrôleur récupère les filtres et appelle les modèles pour afficher la liste
+                correspondante dans la vue produits.
+              </p>
+            </div>
+
+            <div class="project-block reveal" id="abonne">
+              <h2 class="mini-title">5) Gestion de l'abonnement (lettre d'information)</h2>
+              <p class="section-text" style="margin-bottom:.7rem;">
+                Le projet intègre un parcours d'abonnement simple : saisie de l'e-mail, enregistrement et validation.
+                Cette partie apporte une logique métier concrète au-delà de la simple consultation du catalogue.
+              </p>
+              <p class="section-text" style="margin:0;">
+                Elle met en évidence la gestion de la fiabilité des données avec contrôle de validité et gestion des erreurs.
+              </p>
+            </div>
+
+            <div class="project-block reveal" id="videos">
+                  <h2 class="mini-title">6) Démonstrations vidéo</h2>
+              <div class="video-grid">
+                <article class="video-card">
+                  <h3>Parcours abonnement</h3>
+                  <video controls preload="metadata">
+                    <source src="../SiteFranceMobilier/capture/abonne.mp4" type="video/mp4">
+                    Votre navigateur ne prend pas en charge la lecture vidéo.
+                  </video>
+                </article>
+                <article class="video-card">
+                  <h3>Parcours accueil</h3>
+                  <video controls preload="metadata">
+                    <source src="../SiteFranceMobilier/capture/accueil.mp4" type="video/mp4">
+                    Votre navigateur ne prend pas en charge la lecture vidéo.
+                  </video>
+                </article>
+              </div>
+            </div>
+
+            <div class="project-block reveal" id="mail">
+              <h2 class="mini-title">7) Confirmation d'inscription</h2>
+              <p class="section-text" style="margin-bottom:.7rem;">
+                Lors de l'inscription à la lettre d'information, l'application envoie un e-mail de confirmation avec un lien
+                de validation unique. Si l'envoi échoue, l'abonné est supprimé pour garder une base cohérente.
+              </p>
+            </div>
+
+            <div class="project-block reveal" id="points-cles">
+              <h2 class="mini-title">8) Points techniques clés</h2>
+              <p class="section-text" style="margin-bottom:.7rem;">
+                Le projet combine une base technique claire (routing, MVC, SQL) et des fonctionnalités utiles côté utilisateur.
+              </p>
+              <ul class="section-text" style="margin:0; padding-left:1.25rem;">
+                <li>Navigation simple avec filtrage catégorie/gamme.</li>
+                <li>Catalogue clair pour faciliter la consultation produit.</li>
+                <li>Inscription newsletter avec validation par e-mail.</li>
+                <li>Architecture structurée pour séparer affichage, logique et données.</li>
+              </ul>
+              <p class="section-text" style="margin:1rem 0 0;">
+                L'ensemble démontre une organisation propre du code et un flux fonctionnel complet,
+                du catalogue produit jusqu'à la validation d'abonnement.
+              </p>
+            </div>
+
+            <div class="project-block reveal" id="tech">
+              <h2 class="mini-title">9) Technologies utilisées</h2>
+              <div class="tech-tags">
+                <span class="tech-tag">PHP</span>
+                <span class="tech-tag">MVC</span>
+                <span class="tech-tag">SQL</span>
+                <span class="tech-tag">HTML / CSS</span>
+                <span class="tech-tag">Bootstrap</span>
+                <span class="tech-tag">PHPMailer</span>
+              </div>
+            </div>
+
+            <div class="project-block reveal" id="conclusion">
+              <h2 class="mini-title">10) Conclusion</h2>
+              <p class="section-text" style="margin:0;">
+                Ce projet illustre ma capacité à concevoir une application web structurée, orientée utilisateur
+                et appuyée sur des choix techniques cohérents en PHP/MVC. Il associe consultation produit et logique métier réelle.
+              </p>
+            </div>
+
+            <div class="hero-buttons">
+              <a href="index.html#projets" class="hero-btn hero-btn-outline">Retour aux projets</a>
+            </div>
+          </div>
+
+          <aside class="project-right">
+            <div class="right-card right-card-tree reveal" id="arbo-tree">
+              <h4>Arbre des fichiers</h4>
+              <div class="file-tree" role="tree" aria-label="Arborescence SiteFranceMobilier">
+                <ul>
+                  <li>
+                    <span class="tree-folder">SiteFranceMobilier/</span>
+                    <ul>
+                      <li><button class="tree-file" data-file="index.php" type="button">index.php</button></li>
+                      <li>
+                        <span class="tree-folder">controleurs/</span>
+                        <ul>
+                          <li><button class="tree-file" data-file="controleurs/c_consulterProduits.php" type="button">c_consulterProduits.php</button></li>
+                          <li><button class="tree-file" data-file="controleurs/c_menu.php" type="button">c_menu.php</button></li>
+                          <li><button class="tree-file" data-file="controleurs/c_ajouterAbonne.php" type="button">c_ajouterAbonne.php</button></li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="tree-folder">modeles/</span>
+                        <ul>
+                          <li><button class="tree-file" data-file="modeles/m_generique.php" type="button">m_generique.php</button></li>
+                          <li><button class="tree-file" data-file="modeles/m_categorie.php" type="button">m_categorie.php</button></li>
+                          <li><button class="tree-file" data-file="modeles/m_gamme.php" type="button">m_gamme.php</button></li>
+                          <li><button class="tree-file" data-file="modeles/m_produit.php" type="button">m_produit.php</button></li>
+                          <li><button class="tree-file" data-file="modeles/m_magasin.php" type="button">m_magasin.php</button></li>
+                          <li><button class="tree-file" data-file="modeles/m_abonne.php" type="button">m_abonne.php</button></li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="tree-folder">metiers/</span>
+                        <ul>
+                          <li><button class="tree-file" data-file="metiers/Categorie.php" type="button">Categorie.php</button></li>
+                          <li><button class="tree-file" data-file="metiers/Gamme.php" type="button">Gamme.php</button></li>
+                          <li><button class="tree-file" data-file="metiers/Produit.php" type="button">Produit.php</button></li>
+                          <li><button class="tree-file" data-file="metiers/Magasin.php" type="button">Magasin.php</button></li>
+                          <li><button class="tree-file" data-file="metiers/Abonne.php" type="button">Abonne.php</button></li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="tree-folder">vues/</span>
+                        <ul>
+                          <li><button class="tree-file" data-file="vues/v_entete.php" type="button">v_entete.php</button></li>
+                          <li><button class="tree-file" data-file="vues/v_menu.php" type="button">v_menu.php</button></li>
+                          <li><button class="tree-file" data-file="vues/v_accueil.php" type="button">v_accueil.php</button></li>
+                          <li><button class="tree-file" data-file="vues/v_listePdt.php" type="button">v_listePdt.php</button></li>
+                          <li><button class="tree-file" data-file="vues/v_saisieAbonne.php" type="button">v_saisieAbonne.php</button></li>
+                          <li><button class="tree-file" data-file="vues/v_message.php" type="button">v_message.php</button></li>
+                          <li><button class="tree-file" data-file="vues/v_piedPage.php" type="button">v_piedPage.php</button></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="right-card reveal">
+              <h4>Objectif</h4>
+              <p>Proposer un catalogue mobilier clair avec filtres efficaces et gestion simple de la newsletter.</p>
+            </div>
+            <div class="right-card reveal">
+              <h4>Compétences mobilisées</h4>
+              <ul>
+                <li>Routage PHP avec front controller</li>
+                <li>Architecture MVC et séparation des rôles</li>
+                <li>Requêtes SQL via couche modèle</li>
+                <li>Intégration UI responsive</li>
+              </ul>
+            </div>
+            <div class="right-card reveal">
+              <h4>Points techniques clés</h4>
+              <ul>
+                <li>Navigation centralisée par routeur PHP</li>
+                <li>Filtrage dynamique catégorie / gamme</li>
+                <li>Workflow newsletter avec PHPMailer</li>
+                <li>Gestion des erreurs côté serveur</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button type="button" class="scroll-top-btn" id="scroll-top-btn" aria-label="Retour en haut">↑</button>
+  <script>
+    (function () {
+      const revealEls = document.querySelectorAll('.reveal');
+      const tocLinks = document.querySelectorAll('.project-toc a');
+      const scrollTopBtn = document.getElementById('scroll-top-btn');
+      const treeFiles = Array.from(document.querySelectorAll('.tree-file'));
+      const viewerTitle = document.getElementById('file-viewer-title');
+      const viewerExplain = document.getElementById('file-viewer-explain');
+      const viewerCode = document.getElementById('file-viewer-code');
+      const fileDetails = {
+        "index.php": {
+          explain: "Point d'entrée unique de l'application. Il lit le paramètre page et redirige vers le contrôleur et l'action adaptée.",
+          code: `<?php
+if (!empty($_GET['page'])) { $page = $_GET['page']; }
+else { $page = "accueil"; }
+
+switch ($page) {
+  case "accueil": /* ... */ break;
+  case "listePdt": /* ... */ break;
+  case "saisieAbonne": /* ... */ break;
+  case "ajoutAbonne": /* ... */ break;
+  case "validationAbonne": /* ... */ break;
+  default: /* accueil */ break;
+}`
+        },
+        "controleurs/c_consulterProduits.php": {
+          explain: "Contrôleur de consultation. Il charge les modèles produits/catégories/gammes et affiche l'accueil ou une liste filtrée.",
+          code: `class c_consulterProduits {
+  public function action_accueil() {
+    require_once "vues/v_accueil.php";
+  }
+  public function action_listeProduits($idCategorie,$idGamme) {
+    $this->data['laCategorie']=$this->modele_categorie->GetCateg($idCategorie);
+    $this->data['lesProduits']=$this->modele_produit->GetListe($idCategorie,$idGamme);
+    $this->data['laGamme']=$this->modele_gamme->GetGamme($idGamme);
+    require_once "vues/v_listePdt.php";
+  }
+}`
+        },
+        "controleurs/c_menu.php": {
+          explain: "Sous-contrôleur qui prépare les données communes du menu latéral (catégories, gammes, magasins).",
+          code: `public function FillData(&$data) {
+  $data['lesCategories']=$this->modele_categorie->GetListe();
+  $data['lesGammes']=$this->modele_gamme->GetListe();
+  $data['lesMagasin']=$this->modele_magasin->GetListe();
+}`
+        },
+        "controleurs/c_ajouterAbonne.php": {
+          explain: "Contrôleur newsletter : saisie de l'email, ajout d'abonné, envoi d'un mail de confirmation et validation finale.",
+          code: `public function action_ajout($email,$gamme) {
+  if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $abonne=$this->modele_abonne->Ajouter($id,$email,$date,$ok,$gamme);
+    if ($mail->Send()) { $this->data['leMessage']="Mail envoye"; }
+    else { $this->modele_abonne->Supprimer($id); }
+  }
+  require_once "vues/v_message.php";
+}`
+        },
+        "modeles/m_generique.php": {
+          explain: "Classe mère des modèles. Elle centralise la connexion/déconnexion MySQL et l'accès à l'objet de connexion.",
+          code: `class m_generique {
+  private $cnx;
+  public function connexion() {
+    $this->cnx=mysqli_connect("127.0.0.1","root","","francemobilier");
+    mysqli_set_charset($this->cnx, "utf8");
+  }
+  public function deconnexion() { mysqli_close($this->cnx); }
+}`
+        },
+        "modeles/m_categorie.php": {
+          explain: "Modèle catégorie. Il retourne la liste des catégories ou une catégorie précise depuis la base.",
+          code: `public function GetListe() {
+  $req="select * from categorie order by cat_libelle";
+  // parcours des lignes + creation d'objets Categorie
+}
+public function GetCateg($id) {
+  $req="select * from categorie where cat_id=".$id;
+}`
+        },
+        "modeles/m_gamme.php": {
+          explain: "Modèle gamme. Même rôle que les catégories, mais pour les gammes de produits.",
+          code: `public function GetListe() {
+  $req="select * from gamme order by gam_libelle";
+}
+public function GetGamme($id) {
+  $req="select * from gamme where gam_id=".$id;
+}`
+        },
+        "modeles/m_produit.php": {
+          explain: "Modèle produit. Construit la requête SQL selon les filtres catégorie/gamme puis retourne la liste des produits.",
+          code: `public function GetListe($categ,$gamme) {
+  $req = "SELECT * FROM produit";
+  if ($categ != 0 && $gamme == 0) { $where .= "pro_categorie = ".$categ; }
+  else if ($categ == 0 && $gamme != 0) { $where .= "pro_gamme = ".$gamme; }
+  else if ($categ != 0 && $gamme != 0) { $where .= "pro_gamme = ".$gamme." AND pro_categorie = ".$categ; }
+  if ($where != "") { $req .= " WHERE ".$where; }
+}`
+        },
+        "modeles/m_magasin.php": {
+          explain: "Modele magasin. Recupere les magasins pour les afficher dans la page d'accueil.",
+          code: `public function GetListe() {
+  $req="select * from magasin order by mag_nom";
+  // creation d'objets Magasin
+}`
+        },
+        "modeles/m_abonne.php": {
+          explain: "Modèle abonné. Gère l'ajout, la validation et la suppression des abonnés newsletter.",
+          code: `public function Ajouter($id,$email,$date,$ok,$gamme) {
+  $email=mysqli_real_escape_string($this->GetCnx(),$email);
+  $req="insert into abonne values ('".$id."','".$email."','".$date."',".$ok.",".$gamme.")";
+}
+public function Valider($id) { $req="update abonne set abo_ok=1 where abo_id='".$id."'"; }`
+        },
+        "metiers/Categorie.php": {
+          explain: "Classe métier Catégorie (objet simple) avec attributs + getters.",
+          code: `class Categorie {
+  private $cat_id;
+  private $cat_libelle;
+  public function GetId() { return $this->cat_id; }
+  public function GetLibelle() { return $this->cat_libelle; }
+}`
+        },
+        "metiers/Gamme.php": {
+          explain: "Classe métier Gamme avec la même logique de structuration des données.",
+          code: `class Gamme {
+  private $gam_id;
+  private $gam_libelle;
+  public function GetId() { return $this->gam_id; }
+  public function GetLibelle() { return $this->gam_libelle; }
+}`
+        },
+        "metiers/Produit.php": {
+          explain: "Classe métier Produit : représente un produit (réf., désignation, prix, photo).",
+          code: `class Produit {
+  private $pro_reference;
+  private $pro_designation;
+  private $pro_prixTTC;
+  private $pro_photo;
+  // getters utilises par la vue v_listePdt.php
+}`
+        },
+        "metiers/Magasin.php": {
+          explain: "Classe métier Magasin : regroupe nom et adresse et fournit une méthode d'affichage.",
+          code: `class Magasin {
+  public function GetInfos() {
+    return $this->mag_nom.' '.$this->mag_adresse.' '.$this->mag_cpville;
+  }
+}`
+        },
+        "metiers/Abonne.php": {
+          explain: "Classe métier Abonné : encapsule les informations d'inscription newsletter.",
+          code: `class Abonne {
+  private $abo_id;
+  private $abo_email;
+  private $abo_ok;
+  public function GetId() { return $this->abo_id; }
+  public function GetEmail() { return $this->abo_email; }
+}`
+        },
+        "vues/v_entete.php": {
+          explain: "Vue d'entete HTML globale : doctype, meta, Bootstrap et ouverture du body.",
+          code: `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>France Mobilier</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>`
+        },
+        "vues/v_menu.php": {
+          explain: "Vue du menu latéral. Contient les boutons de navigation et le formulaire de filtres.",
+          code: `<a href="index.php?page=accueil" class="btn btn-outline-success w-100 mb-2">Accueil</a>
+<a href="index.php?page=saisieAbonne" class="btn btn-outline-success w-100">S'abonner</a>
+<select name="categ" id="categ" class="form-select">...</select>
+<select name="gamme" id="gamme" class="form-select">...</select>`
+        },
+        "vues/v_accueil.php": {
+          explain: "Vue accueil : message principal, magasins et carrousel de visuels.",
+          code: `<?php include 'v_entete.php'; ?>
+<?php include 'v_menu.php'; ?>
+<h1>France-Mobilier, les pros du meuble...</h1>
+<?php foreach ($this->data['lesMagasin'] as $unMagasin) { echo $unMagasin->GetInfos().'<br>'; } ?>`
+        },
+        "vues/v_listePdt.php": {
+          explain: "Vue de resultat des produits : titre dynamique selon filtres + tableau des produits.",
+          code: `<h1 class="mb-4 text-success">Liste des produits</h1>
+<?php foreach ($this->data['lesProduits'] as $unProduit): ?>
+  <tr>
+    <td><?= $unProduit->GetReference(); ?></td>
+    <td><?= $unProduit->GetDesignation(); ?></td>
+    <td><?= number_format($unProduit->GetPrixTTC(), 2, ',', ' '); ?> €</td>
+  </tr>
+<?php endforeach; ?>`
+        },
+        "vues/v_saisieAbonne.php": {
+          explain: "Formulaire d'abonnement newsletter. Envoie l'email + gamme vers la route ajoutAbonne.",
+          code: `<form action="index.php" method="get">
+  <input type="email" name="email" required>
+  <select name="gamme" id="gamme" class="form-select">...</select>
+  <input type="hidden" name="page" value="ajoutAbonne" />
+  <button type="submit" class="btn btn-success">S'abonner</button>
+</form>`
+        },
+        "vues/v_message.php": {
+          explain: "Vue de retour utilisateur. Affiche les messages de succès/erreur après action.",
+          code: `<main class="col-12 col-md-9 col-lg-10 p-5">
+  <h1 class="mb-4 text-success">France-Mobilier, les pros du meuble...</h1>
+  <h2 class="mb-4"><?php echo $this->data['leMessage']; ?></h2>
+</main>`
+        },
+        "vues/v_piedPage.php": {
+          explain: "Pied de page commun de l'application.",
+          code: `<footer class="bg-dark text-white text-center py-3 mt-auto">
+  <small>&copy; <?= date('Y') ?> - France Mobilier</small>
+</footer>`
+        }
+      };
+
+      async function renderFileDetails(filePath) {
+        if (!viewerTitle || !viewerExplain || !viewerCode) return;
+        const detail = fileDetails[filePath];
+        if (!detail) return;
+        viewerTitle.textContent = filePath;
+        viewerExplain.textContent = detail.explain;
+        viewerCode.textContent = detail.code;
+        treeFiles.forEach(function (btn) {
+          btn.classList.toggle('is-active', btn.dataset.file === filePath);
+        });
+        try {
+          const sourcePath = "../SiteFranceMobilier/" + filePath;
+          const response = await fetch(encodeURI(sourcePath));
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          viewerCode.textContent = await response.text();
+        } catch (error) {
+          viewerCode.textContent = detail.code + "\n\n// Impossible de charger le fichier complet automatiquement.";
+        }
+      }
+
+      treeFiles.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          renderFileDetails(btn.dataset.file);
+        });
+      });
+      if (treeFiles.length) renderFileDetails(treeFiles[0].dataset.file);
+
+      if ('IntersectionObserver' in window) {
+        const revealObs = new IntersectionObserver(function (entries) {
+          const visible = entries.filter(function (e) { return e.isIntersecting; });
+          visible.forEach(function (entry, index) {
+            setTimeout(function () {
+              entry.target.classList.add('reveal-visible');
+              revealObs.unobserve(entry.target);
+            }, index * 100);
+          });
+        }, { threshold: 0.15 });
+        revealEls.forEach(function (el) { revealObs.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
+      }
+
+      function setActiveToc() {
+        const sections = Array.from(document.querySelectorAll('.project-block[id]'));
+        if (!sections.length) return;
+        const probe = window.innerHeight * 0.3;
+        let currentId = sections[0].id;
+        sections.forEach(function (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= probe && rect.bottom > probe) currentId = section.id;
+        });
+        tocLinks.forEach(function (link) {
+          const id = (link.getAttribute('href') || '').replace('#', '');
+          link.classList.toggle('is-active', id === currentId);
+        });
+      }
+      window.addEventListener('scroll', setActiveToc, { passive: true });
+      window.addEventListener('resize', setActiveToc);
+      setActiveToc();
+
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+          const href = link.getAttribute('href') || '';
+          if (!href.startsWith('#')) return;
+          event.preventDefault();
+          const target = document.querySelector(href);
+          if (!target) return;
+          target.classList.add('reveal-visible');
+          window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' });
+        });
+      });
+
+      function updateScrollTopButton() {
+        if (!scrollTopBtn) return;
+        scrollTopBtn.classList.toggle('is-visible', window.scrollY > 280);
+      }
+      window.addEventListener('scroll', updateScrollTopButton, { passive: true });
+      updateScrollTopButton();
+      if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', function () {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

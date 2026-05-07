@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <title>Où est l'ISS ?</title>
+</head>
+
+<body>
+    <main class="container">
+        <header class="hero">
+            <h1>Où est l'ISS ?</h1>
+            <p class="subtitle">Suivi en temps réel de la Station Spatiale Internationale.</p>
+        </header>
+
+        <section class="stats">
+            <article class="stat-item">
+                <h2>Latitude</h2>
+                <p><span id="lat"></span>°</p>
+            </article>
+            <article class="stat-item">
+                <h2>Longitude</h2>
+                <p><span id="lon"></span>°</p>
+            </article>
+            <article class="stat-item">
+                <h2>Altitude</h2>
+                <p><span id="alt"></span> km</p>
+            </article>
+            <article class="stat-item">
+                <h2>Vitesse</h2>
+                <p><span id="speed"></span> km/h</p>
+            </article>
+        </section>
+
+        <section class="map-card">
+            <h2>Position actuelle</h2>
+            <div id="issMap"></div>
+        </section>
+    </main>
+
+    <script src="index.js"></script>
+</body>
+</html>
