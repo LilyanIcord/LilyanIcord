@@ -1658,11 +1658,11 @@ body:has(#theme-toggle:checked) .veille-card {
 }
 
 .projet-image--stage {
-  background-image: url("../stages/image auto-école/woman-taking-her-driver-s-license-test-vehicle (1).jpg");
+  background-image: url("stages/image auto-école/woman-taking-her-driver-s-license-test-vehicle (1).jpg");
 }
 
 .projet-image--iss {
-  background-image: url("../iss-master/Capture d'écran 2026-05-05 141517.png");
+  background-image: url("iss-master/Capture d'écran 2026-05-05 141517.png");
 }
 
 .projet-image--weather {

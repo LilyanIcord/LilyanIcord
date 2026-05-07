@@ -569,7 +569,7 @@
           <div class="shots-grid">
             <figure class="shot">
               <div class="shot-media">
-                <img src="../PHP_MVC-master/image%20site/page%20d'accueil.PNG" alt="Page d'accueil" loading="lazy" onerror="this.closest('figure').style.display='none'">
+                <img src="PHP_MVC-master/image%20site/page%20d'accueil.PNG" alt="Page d'accueil" loading="lazy" onerror="this.closest('figure').style.display='none'">
               </div>
               <figcaption>Page d'accueil</figcaption>
               <p class="shot-note">Cette page sert d'entrée unique. Le routeur décide ensuite quelle vue afficher selon le paramètre <code>page</code>.</p>
@@ -582,7 +582,7 @@ switch ($page) {
             </figure>
             <figure class="shot">
               <div class="shot-media">
-                <img src="../PHP_MVC-master/image%20site/vue%20login.PNG" alt="Vue login" loading="lazy" onerror="this.closest('figure').style.display='none'">
+                <img src="PHP_MVC-master/image%20site/vue%20login.PNG" alt="Vue login" loading="lazy" onerror="this.closest('figure').style.display='none'">
               </div>
               <figcaption>Connexion utilisateur</figcaption>
               <p class="shot-note">L’utilisateur saisit ses identifiants, puis le contrôleur d’authentification valide l’accès et ouvre la session.</p>
@@ -595,7 +595,7 @@ switch ($page) {
             </figure>
             <figure class="shot">
               <div class="shot-media">
-                <img src="../PHP_MVC-master/image%20site/menu%20employes.PNG" alt="Menu employés" loading="lazy" onerror="this.closest('figure').style.display='none'">
+                <img src="PHP_MVC-master/image%20site/menu%20employes.PNG" alt="Menu employés" loading="lazy" onerror="this.closest('figure').style.display='none'">
               </div>
               <figcaption>Menu employés</figcaption>
               <p class="shot-note">Le menu expose les actions métier (consulter, ajouter, modifier, supprimer) et alimente la navigation entre contrôleurs.</p>
@@ -606,7 +606,7 @@ require_once "vues/v_accueil.php";</pre>
             </figure>
             <figure class="shot">
               <div class="shot-media">
-                <img src="../PHP_MVC-master/image%20site/ListeEmployes.PNG" alt="Liste employés" loading="lazy" onerror="this.closest('figure').style.display='none'">
+                <img src="PHP_MVC-master/image%20site/ListeEmployes.PNG" alt="Liste employés" loading="lazy" onerror="this.closest('figure').style.display='none'">
               </div>
               <figcaption>Liste des employés</figcaption>
               <p class="shot-note">Le tableau affiche les employés avec actions directes. La recherche filtre les lignes en temps réel côté client.</p>
@@ -620,7 +620,7 @@ require_once "vues/v_accueil.php";</pre>
             </figure>
             <figure class="shot">
               <div class="shot-media">
-                <img src="../PHP_MVC-master/image%20site/page%20ajoutEmploye.PNG" alt="Ajout employé" loading="lazy" onerror="this.closest('figure').style.display='none'">
+                <img src="PHP_MVC-master/image%20site/page%20ajoutEmploye.PNG" alt="Ajout employé" loading="lazy" onerror="this.closest('figure').style.display='none'">
               </div>
               <figcaption>Ajout d'un employé</figcaption>
               <p class="shot-note">Avant insertion, le système vérifie l’unicité du matricule pour éviter les doublons en base de données.</p>
@@ -633,7 +633,7 @@ require_once "vues/v_accueil.php";</pre>
             </figure>
             <figure class="shot">
               <div class="shot-media">
-                <img src="../PHP_MVC-master/image%20site/concepteur.PNG" alt="Concepteur base" loading="lazy" onerror="this.closest('figure').style.display='none'">
+                <img src="PHP_MVC-master/image%20site/concepteur.PNG" alt="Concepteur base" loading="lazy" onerror="this.closest('figure').style.display='none'">
               </div>
               <figcaption>Conception base de données</figcaption>
               <p class="shot-note">La structure SQL permet le CRUD sur les employés. Les entrées sont échappées avant l'exécution des requêtes pour réduire les risques d'injection.</p>
@@ -892,7 +892,7 @@ $ok = mysqli_query($this->GetCnx(), $req);</pre>
         viewerCode.textContent = detail.code;
         treeFiles.forEach(function (btn) { btn.classList.toggle('is-active', btn.dataset.file === filePath); });
         try {
-          const sourcePath = "../PHP_MVC-master/empsce/" + filePath;
+          const sourcePath = "PHP_MVC-master/empsce/" + filePath;
           const response = await fetch(encodeURI(sourcePath));
           if (!response.ok) throw new Error("HTTP " + response.status);
           viewerCode.textContent = await response.text();

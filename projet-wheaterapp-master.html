@@ -194,7 +194,7 @@
               <div class="project-gallery project-gallery-single">
                 <div class="project-preview-wrap">
                   <video class="project-video" controls preload="metadata" title="Démonstration vidéo WeatherApp Master">
-                    <source src="../WheaterApp-master/Enregistrement de l'écran 2026-05-05 135736.mp4" type="video/mp4">
+                    <source src="WheaterApp-master/Enregistrement de l'écran 2026-05-05 135736.mp4" type="video/mp4">
                     Votre navigateur ne prend pas en charge la lecture vidéo.
                   </video>
                 </div>
@@ -270,7 +270,7 @@
             </div>
 
             <div class="hero-buttons">
-              <a href="../WheaterApp-master/public/index.html" class="hero-btn hero-btn-primary" target="_blank" rel="noopener">Ouvrir le projet</a>
+              <a href="WheaterApp-master/public/index.html" class="hero-btn hero-btn-primary" target="_blank" rel="noopener">Ouvrir le projet</a>
               <a href="index.html#projets" class="hero-btn hero-btn-outline">Retour aux projets</a>
             </div>
           </div>
@@ -388,7 +388,7 @@
         treeFiles.forEach(function (btn) { btn.classList.toggle('is-active', btn.dataset.file === filePath); });
         if (filePath === ".env") return;
         try {
-          const response = await fetch(encodeURI("../WheaterApp-master/" + filePath));
+          const response = await fetch(encodeURI("WheaterApp-master/" + filePath));
           if (!response.ok) throw new Error("HTTP " + response.status);
           viewerCode.textContent = await response.text();
         } catch (e) {

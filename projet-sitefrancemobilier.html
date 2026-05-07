@@ -251,14 +251,14 @@
                 <article class="video-card">
                   <h3>Parcours abonnement</h3>
                   <video controls preload="metadata">
-                    <source src="../SiteFranceMobilier/capture/abonne.mp4" type="video/mp4">
+                    <source src="SiteFranceMobilier/capture/abonne.mp4" type="video/mp4">
                     Votre navigateur ne prend pas en charge la lecture vidéo.
                   </video>
                 </article>
                 <article class="video-card">
                   <h3>Parcours accueil</h3>
                   <video controls preload="metadata">
-                    <source src="../SiteFranceMobilier/capture/accueil.mp4" type="video/mp4">
+                    <source src="SiteFranceMobilier/capture/accueil.mp4" type="video/mp4">
                     Votre navigateur ne prend pas en charge la lecture vidéo.
                   </video>
                 </article>
@@ -628,7 +628,7 @@ public function Valider($id) { $req="update abonne set abo_ok=1 where abo_id='".
           btn.classList.toggle('is-active', btn.dataset.file === filePath);
         });
         try {
-          const sourcePath = "../SiteFranceMobilier/" + filePath;
+          const sourcePath = "SiteFranceMobilier/" + filePath;
           const response = await fetch(encodeURI(sourcePath));
           if (!response.ok) throw new Error("HTTP " + response.status);
           viewerCode.textContent = await response.text();

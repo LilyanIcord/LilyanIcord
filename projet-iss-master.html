@@ -197,7 +197,7 @@
             <div class="project-block reveal" id="apercu">
               <h2 class="mini-title">2) Aperçu visuel du projet</h2>
               <div class="project-preview-wrap" id="project-preview-wrap">
-                <img class="project-cover" src="../iss-master/Capture d'écran 2026-05-05 141517.png" alt="Aperçu visuel du projet ISS Master">
+                <img class="project-cover" src="iss-master/Capture d'écran 2026-05-05 141517.png" alt="Aperçu visuel du projet ISS Master">
               </div>
             </div>
 
@@ -253,7 +253,7 @@
                   <span><strong>JavaScript</strong><br>Récupération API et mise à jour en temps réel.</span>
                 </article>
                 <article class="tech-visual">
-                  <img src="../iss-master/Capture d'écran 2026-05-05 141517.png" alt="Illustration API ISS">
+                  <img src="iss-master/Capture d'écran 2026-05-05 141517.png" alt="Illustration API ISS">
                   <span><strong>API ISS</strong><br>Données live de latitude, longitude, altitude et vitesse.</span>
                 </article>
               </div>
@@ -268,7 +268,7 @@
             </div>
 
             <div class="hero-buttons">
-              <a href="../iss-master/index.html" class="hero-btn hero-btn-primary" target="_blank" rel="noopener">Ouvrir le projet</a>
+              <a href="iss-master/index.html" class="hero-btn hero-btn-primary" target="_blank" rel="noopener">Ouvrir le projet</a>
               <a href="index.html#projets" class="hero-btn hero-btn-outline">Retour aux projets</a>
             </div>
           </div>
@@ -351,7 +351,7 @@
         viewerCode.textContent = detail.code;
         treeFiles.forEach(function (btn) { btn.classList.toggle('is-active', btn.dataset.file === filePath); });
         try {
-          const response = await fetch(encodeURI("../iss-master/" + filePath));
+          const response = await fetch(encodeURI("iss-master/" + filePath));
           if (!response.ok) throw new Error("HTTP " + response.status);
           let fileContent = await response.text();
           if (filePath === "index.html") {
